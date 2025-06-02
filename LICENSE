@@ -1,0 +1,43 @@
+Arzs Mini Dev Tools - Audit and Personal Use License
+
+Copyright (c) 2025 Arzs Mini Dev Tools
+
+PERMITTED USES:
+- Code review and security auditing
+- Personal inspection and verification of privacy claims
+- Academic research and study
+- Personal compilation and use (non-commercial)
+- Contributing improvements via pull requests to the original repository
+- Forking for personal modifications (not for distribution)
+
+PROHIBITED USES:
+- Commercial use or redistribution
+- Distribution of compiled versions (original or modified)
+- Publishing to app stores or extension marketplaces
+- Creating competing products or services
+- Commercial licensing or selling
+
+TRANSPARENCY NOTICE:
+This source code is made available primarily for security auditing and 
+verification that no tracking, analytics, or data collection mechanisms
+are present. Users and security researchers are encouraged to review the code
+to verify the privacy and security claims of this browser extension.
+
+PERSONAL USE:
+You may compile and use this software for your own personal, non-commercial
+purposes. You may not distribute compiled versions to others.
+
+CONTRIBUTIONS:
+Contributions to improve the original project are welcome and encouraged
+through pull requests to the official repository.
+
+DISCLAIMER:
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+For any use not explicitly permitted above, please contact the copyright holder
+for written permission.

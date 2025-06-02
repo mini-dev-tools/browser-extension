@@ -1,0 +1,21 @@
+[
+    {
+        "palette_name": "Default",
+        "palette_id": "0",
+        "version": "1.0",
+        
+        "versions": [
+
+        {
+            "version": "1.0",
+            "colors": []
+        }   
+        ],
+        "colors": [
+            {
+                "color_name": "Black",
+                "color_hex": "#000000"
+            }
+        ]
+    }
+]
