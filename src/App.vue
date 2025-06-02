@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { useMainStore } from './stores/mainStore';
 import CompactNavbar from './components/CompactNavbar.vue';
 import { Toaster } from '@/components/ui/sonner';
 
 const mainStore = useMainStore();
+const router = useRouter();
+const route = useRoute();
 
 const activeIndex = ref('1');
 const activeIndex2 = ref('1');
+
 const handleSelect = (key: string, keyPath: string[]) => {
   console.log(key, keyPath);
 };
@@ -18,10 +22,35 @@ const toggleTheme = () => {
     let ht = document.getElementsByTagName('html')[0];
     ht.classList.toggle('dark');
   }
-
 };
 
-toggleTheme();
+// Route memory functionality
+const LAST_ROUTE_KEY = 'last-visited-route';
+
+const saveCurrentRoute = () => {
+  if (route.path !== '/') {
+    localStorage.setItem(LAST_ROUTE_KEY, route.path);
+  }
+};
+
+const restoreLastRoute = () => {
+  const lastRoute = localStorage.getItem(LAST_ROUTE_KEY);
+  if (lastRoute && lastRoute !== '/' && route.path === '/') {
+    router.push(lastRoute);
+  }
+};
+
+// Watch for route changes and save them
+watch(() => route.path, (newPath) => {
+  if (newPath !== '/') {
+    localStorage.setItem(LAST_ROUTE_KEY, newPath);
+  }
+});
+
+onMounted(() => {
+  toggleTheme();
+  restoreLastRoute();
+});
 
 
 </script>

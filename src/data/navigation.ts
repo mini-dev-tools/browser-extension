@@ -23,7 +23,10 @@ import {
   ImageIcon,
   Syringe,
   ExternalLink,
-  Book
+  Book,
+  Lock,
+  Clock,
+  Binary
 } from 'lucide-vue-next'
 
 export interface NavigationItem {
@@ -58,7 +61,7 @@ export const navigationSections: NavigationSection[] = [
         label: 'Password',
         path: '/password',
         description: 'Generate secure passwords',
-        icon: Key
+        icon: Lock
       },
       {
         label: 'UUID',
@@ -70,7 +73,7 @@ export const navigationSections: NavigationSection[] = [
         label: 'Hash Generator',
         path: '/hasher',
         description: 'MD5, SHA1, SHA256, SHA512',
-        icon: Hash
+        icon: Binary
       },
       {
         label: 'Base64 Encode/Decode',
@@ -88,19 +91,13 @@ export const navigationSections: NavigationSection[] = [
         label: 'Timestamp Converter',
         path: '/timestamp',
         description: 'Unix timestamp converter',
-        icon: Hash
+        icon: Clock
       },
       {
         label: 'URL Encode/Decode',
         path: '/url-encode-decode',
         description: 'Encode and decode URLs',
         icon: Globe
-      },
-      {
-        label: 'CSS Buttons',
-        path: '/button-generator',
-        description: 'Generate button styles',
-        icon: Code2
       },
       {
         label: 'Swagger Viewer',
@@ -160,16 +157,16 @@ export const navigationSections: NavigationSection[] = [
         icon: Pipette
       },
       {
-        label: 'Material Colors',
-        path: '/material-colors',
-        description: 'Material design colors',
-        icon: Palette
-      },
-      {
         label: 'Color Shades',
         path: '/color-shades',
         description: 'Generate color variations',
         icon: Layers
+      },
+      {
+        label: 'Gradient Generator',
+        path: '/gradient-generator',
+        description: 'CSS gradients',
+        icon: Blend
       },
       {
         label: 'Contrast Checker',
@@ -178,16 +175,16 @@ export const navigationSections: NavigationSection[] = [
         icon: Contrast
       },
       {
+        label: 'Material Colors',
+        path: '/material-colors',
+        description: 'Material design colors',
+        icon: Palette
+      },
+      {
         label: 'Palettes',
         path: '/palettes',
         description: 'Color palette collections',
         icon: Palette
-      },
-      {
-        label: 'Gradient Generator',
-        path: '/gradient-generator',
-        description: 'CSS gradients',
-        icon: Blend
       }
     ]
   },
@@ -282,7 +279,10 @@ export const isChromeExtension = (): boolean => {
 export const iconSvgMap: Record<string, string> = {
   Type: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>',
   Key: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" /></svg>',
+  Lock: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>',
   Hash: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" /></svg>',
+  Binary: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" /></svg>',
+  Clock: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
   Code2: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" /></svg>',
   Globe: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" /></svg>',
   Info: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25M9 16.5v.75m3-3V15M15 12v.75m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>',

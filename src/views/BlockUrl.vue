@@ -5,6 +5,12 @@
       <p class="text-muted-foreground">Block access to distracting websites to improve your focus and productivity.</p>
     </div>
 
+    <!-- Extension Alert -->
+    <ExtensionRequired 
+      ref="extensionAlert"
+      message="URL blocking functionality is not available." 
+    />
+
     <Card class="max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle class="flex items-center space-x-2">
@@ -112,6 +118,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Shield, Info } from 'lucide-vue-next';
+import ExtensionRequired from '@/components/ExtensionRequired.vue';
 
 const blockSettings = ref({
   enabled: false,

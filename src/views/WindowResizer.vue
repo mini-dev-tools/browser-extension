@@ -1,13 +1,15 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { Input } from '@/components/ui/input';
+import ExtensionRequired from '@/components/ExtensionRequired.vue';
 
 declare const chrome: any;
 
 export default defineComponent({
   name: 'WindowResizer',
   components: {
-    Input
+    Input,
+    ExtensionRequired
   },
   // type inference enabled
   data() {
@@ -150,7 +152,11 @@ export default defineComponent({
       }
     }
   },
-  computed: {},
+  computed: {
+    isAvailable() {
+      return (this.$refs.extensionAlert as any)?.isAvailable || false;
+    }
+  },
   mounted() {
     this.custom.width = window.outerWidth;
     this.custom.height = window.outerHeight;
@@ -159,68 +165,73 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="page-container">
-    <div class="flex justify-between items-end">
-      <div>
-        <h1 class="md:text-blue-300 lg:text-indigo-300">Window Resizer</h1>
-        <p class="text-sm">Resize your window to the specific resolution</p>
-      </div>
-      <div class="flex items-center gap-2">
-        <span class="text-sm">Custom</span>
-        <Input
-          class="w-20"
-          type="number"
-          v-model="custom.width"
-          placeholder="width"
-        />
-        <span class="text-sm">×</span>
-        <Input
-          class="w-20"
-          type="number"
-          v-model="custom.height"
-          placeholder="height"
-        />
-        <button class="btn-secondary" @click="customResize()">Resize</button>
+  <div class="page-container space-y-3">
+    <!-- Compact Header -->
+    <div class="flex items-center justify-between">
+      <h2 class="text-sm font-semibold">Window Resizer</h2>
+      <div class="flex items-center gap-1 text-xs text-muted-foreground">
+        <span>{{ custom.width }}×{{ custom.height }}</span>
       </div>
     </div>
 
-    <div>
-      <ul class="w-full rounded-lg mt-2 mb-3 text-indigo-900">
-        <li
-          class="w-full p-2 my-2 bg-gray-50 pl-6 hover:bg-gray-100 rounded-xl text-small shadow-md hover:shadow-none flex items-center"
-          v-for="(preset, index) in presets"
-          @click="ResizeWindowByPresetIndex(index)"
+    <!-- Custom Resize Row -->
+    <div class="bg-card border border-border rounded-md p-2">
+      <div class="flex items-center gap-2">
+        <Input
+          class="w-20 h-7 text-xs"
+          type="number"
+          v-model="custom.width"
+          placeholder="Width"
+        />
+        <span class="text-xs text-muted-foreground">×</span>
+        <Input
+          class="w-20 h-7 text-xs"
+          type="number"
+          v-model="custom.height"
+          placeholder="Height"
+        />
+        <button 
+          class="bg-primary text-primary-foreground hover:bg-primary/90 px-3 py-1 rounded text-xs font-medium transition-colors duration-200 ml-auto"
+          :disabled="!isAvailable"
+          @click="customResize()"
         >
-          <div class="text-2xl pr-5">
-            <i :class="[preset.icon, 'hover:rotate-90']"></i>
+          Resize
+        </button>
+      </div>
+    </div>
+
+    <!-- Extension Alert -->
+    <ExtensionRequired 
+      ref="extensionAlert"
+      message="Window resizer functionality is not available." 
+    />
+
+    <!-- Compact Preset Grid -->
+    <div class="grid grid-cols-2 gap-2">
+      <div
+        v-for="(preset, index) in presets"
+        :key="index"
+        class="group bg-card hover:bg-accent border border-border hover:border-primary/20 rounded-md p-2 cursor-pointer transition-all duration-200"
+        :class="{ 'opacity-50 cursor-not-allowed': !isAvailable }"
+        @click="isAvailable && ResizeWindowByPresetIndex(index)"
+      >
+        <div class="flex items-center gap-2">
+          <!-- Compact Device Icon -->
+          <div class="w-6 h-6 bg-primary/10 rounded flex items-center justify-center group-hover:bg-primary/15 transition-colors duration-200 flex-shrink-0">
+            <i :class="[preset.icon, 'text-primary text-xs group-hover:scale-110 transition-transform duration-200']"></i>
           </div>
-          <div>
-            <strong>{{ preset.width }} * {{ preset.height }} </strong
-            ><br /><small class="text-gray-800">
-              {{ preset.description }}</small
-            >
+          
+          <!-- Compact Device Info -->
+          <div class="flex-1 min-w-0">
+            <div class="text-xs font-medium text-foreground group-hover:text-primary transition-colors duration-200 truncate">
+              {{ preset.width }}×{{ preset.height }}
+            </div>
+            <div class="text-xs text-muted-foreground group-hover:text-foreground/80 transition-colors duration-200 truncate">
+              {{ preset.description }}
+            </div>
           </div>
-        </li>
-        <li
-          class="w-full p-4 my-2 bg-gray-50 hover:bg-gray-100 rounded-xl shadow-sm flex items-center gap-3"
-        >
-          <span class="text-sm">Custom (pixels)</span>
-          <Input
-            class="w-20"
-            type="number"
-            v-model="custom.width"
-            placeholder="width"
-          />
-          <span class="text-sm">×</span>
-          <Input
-            class="w-20"
-            type="number"
-            v-model="custom.height"
-            placeholder="height"
-          />
-          <button class="btn-secondary" @click="customResize()">Resize</button>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>

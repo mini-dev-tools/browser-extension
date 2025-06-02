@@ -2,19 +2,25 @@
   <div class="page-container">
     <div class="heading-group">
       <h1>Script & CSS Injection</h1>
-      <p class="text-gray-600">Inject custom JavaScript and CSS into websites with URL pattern support</p>
+      <p>Inject custom JavaScript and CSS into websites with URL pattern support</p>
     </div>
+
+    <!-- Extension Alert -->
+    <ExtensionRequired 
+      ref="extensionAlert"
+      message="Script injection functionality is not available." 
+    />
 
     <!-- Tabs for One-time vs Persistent Scripts -->
     <div class="mb-6">
-      <div class="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+      <div class="flex space-x-1 bg-muted p-1 rounded-lg">
         <button
           @click="activeTab = 'instant'"
           :class="[
             'px-4 py-2 rounded-md text-sm font-medium transition-colors',
             activeTab === 'instant'
-              ? 'bg-white text-gray-900 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
+              ? 'bg-background text-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
           ]"
         >
           Instant Injection
@@ -24,8 +30,8 @@
           :class="[
             'px-4 py-2 rounded-md text-sm font-medium transition-colors',
             activeTab === 'persistent'
-              ? 'bg-white text-gray-900 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
+              ? 'bg-background text-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
           ]"
         >
           Persistent Scripts
@@ -35,8 +41,8 @@
           :class="[
             'px-4 py-2 rounded-md text-sm font-medium transition-colors',
             activeTab === 'manage'
-              ? 'bg-white text-gray-900 shadow-sm'
-              : 'text-gray-600 hover:text-gray-900'
+              ? 'bg-background text-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
           ]"
         >
           Manage Scripts
@@ -397,6 +403,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import ExtensionRequired from '@/components/ExtensionRequired.vue'
 
 interface SavedScript {
   id: string

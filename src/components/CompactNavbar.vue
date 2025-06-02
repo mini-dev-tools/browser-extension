@@ -24,7 +24,9 @@ import {
   Video,
   Square,
   ExternalLink,
-  Droplet
+  Droplet,
+  Maximize,
+  Minimize
 } from 'lucide-vue-next';
 import { ScreenshotService } from '@/services/screenshotService';
 import { 
@@ -185,6 +187,7 @@ const checkRecordingState = async () => {
 
 // EyeDropper functionality
 const isEyeDropperActive = ref(false);
+const isFullscreen = ref(false);
 
 const startEyeDropper = async () => {
   console.log('CompactNavbar: startEyeDropper called');
@@ -268,6 +271,41 @@ const startEyeDropper = async () => {
   }
 };
 
+// Fullscreen functionality
+const toggleFullscreen = async () => {
+  // If in Chrome extension, open options page instead
+  if (isChromeExtension()) {
+    try {
+      // Open the extension's options page (which should be the web version)
+      const url = (chrome.runtime as any).getURL('index.html');
+      await (chrome.tabs as any).create({ url });
+    } catch (error) {
+      console.warn('Failed to open options page:', error);
+      // Fallback: try to open web version
+      window.open(window.location.origin, '_blank');
+    }
+    return;
+  }
+
+  // Regular fullscreen for web version
+  try {
+    if (!document.fullscreenElement) {
+      await document.documentElement.requestFullscreen();
+      isFullscreen.value = true;
+    } else {
+      await document.exitFullscreen();
+      isFullscreen.value = false;
+    }
+  } catch (error) {
+    console.warn('Fullscreen not supported or failed:', error);
+  }
+};
+
+// Listen for fullscreen changes
+const handleFullscreenChange = () => {
+  isFullscreen.value = !!document.fullscreenElement;
+};
+
 // Keyboard shortcut handler
 const handleKeydown = (event: KeyboardEvent) => {
   // Alt + P for eyedropper
@@ -276,6 +314,11 @@ const handleKeydown = (event: KeyboardEvent) => {
     event.preventDefault();
     startEyeDropper();
   }
+  // F11 for fullscreen (only on web, not in extension)
+  if (event.key === 'F11' && !isChromeExtension()) {
+    event.preventDefault();
+    toggleFullscreen();
+  }
 };
 
 // Set up component lifecycle
@@ -283,11 +326,15 @@ onMounted(() => {
   checkRecordingState();
   // Add keyboard shortcut listener
   document.addEventListener('keydown', handleKeydown);
+  // Add fullscreen change listener
+  document.addEventListener('fullscreenchange', handleFullscreenChange);
 });
 
 onUnmounted(() => {
   // Remove keyboard shortcut listener
   document.removeEventListener('keydown', handleKeydown);
+  // Remove fullscreen change listener
+  document.removeEventListener('fullscreenchange', handleFullscreenChange);
 });
 
 const currentSection = computed(() => {
@@ -330,33 +377,57 @@ const closeMobileMenu = () => {
               <ChevronDown class="h-3 w-3 ml-1" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent class="w-64 p-2">
-            <DropdownMenuLabel class="px-2 pb-2">
-              <div class="flex items-center space-x-2">
-                <component :is="section.icon" class="h-4 w-4 text-primary" />
-                <span>{{ section.label }}</span>
+          <DropdownMenuContent class="w-72 sm:w-80 p-3 sm:p-4 max-w-[calc(100vw-2rem)]">
+            <DropdownMenuLabel class="px-2 pb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <component :is="section.icon" class="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <div class="font-semibold text-sm">{{ section.label }}</div>
+                  <div class="text-xs text-muted-foreground mt-0.5">{{ section.description }}</div>
+                </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator class="mb-2" />
-            <DropdownMenuItem 
-              v-for="item in section.items" 
-              :key="item.path"
-              class="rounded-lg p-0 focus:bg-accent hover:bg-accent/60 transition-colors"
-            >
-              <router-link 
-                :to="item.path" 
-                class="flex items-start space-x-3 w-full p-3 rounded-lg group"
+            <DropdownMenuSeparator class="mb-3" />
+            <div class="space-y-1">
+              <DropdownMenuItem 
+                v-for="item in section.items" 
+                :key="item.path"
+                class="h-auto p-0 focus:bg-accent hover:bg-accent/70 transition-all duration-200 rounded-lg"
               >
-                <component 
-                  :is="item.icon" 
-                  class="h-4 w-4 mt-0.5 text-muted-foreground group-hover:text-foreground transition-colors" 
-                />
-                <div class="flex flex-col space-y-1">
-                  <span class="font-medium text-sm group-hover:text-foreground">{{ item.label }}</span>
-                  <span class="text-xs text-muted-foreground leading-tight">{{ item.description }}</span>
-                </div>
-              </router-link>
-            </DropdownMenuItem>
+                <router-link 
+                  :to="item.path" 
+                  class="flex items-center gap-2 sm:gap-3 w-full p-2 sm:p-3 group"
+                >
+                  <!-- Icon Container -->
+                  <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-background border border-border/60 group-hover:border-primary/30 group-hover:bg-primary/5 flex items-center justify-center transition-all duration-200">
+                    <component 
+                      :is="item.icon" 
+                      class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground group-hover:text-primary group-hover:scale-110 transition-all duration-200" 
+                    />
+                  </div>
+                  
+                  <!-- Tool Info -->
+                  <div class="flex-1 min-w-0">
+                    <div class="font-medium text-sm text-foreground group-hover:text-primary transition-colors duration-200 truncate">
+                      {{ item.label }}
+                    </div>
+                    <div class="text-xs text-muted-foreground group-hover:text-foreground/80 transition-colors duration-200 line-clamp-1 hidden sm:block">
+                      {{ item.description }}
+                    </div>
+                  </div>
+                  
+                  <!-- Status Badge -->
+                  <div 
+                    v-if="item.status"
+                    class="text-xs px-1.5 sm:px-2 py-1 rounded-full bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-all duration-200"
+                  >
+                    {{ item.status }}
+                  </div>
+                </router-link>
+              </DropdownMenuItem>
+            </div>
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -369,37 +440,63 @@ const closeMobileMenu = () => {
               <ChevronDown class="h-3 w-3 ml-1 hidden lg:inline" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent class="w-64 p-2">
-            <DropdownMenuLabel class="px-2 pb-2">
-              <div class="flex items-center space-x-2">
-                <Menu class="h-4 w-4 text-primary" />
-                <span>More Tools</span>
+          <DropdownMenuContent class="w-72 sm:w-80 p-3 sm:p-4 max-w-[calc(100vw-2rem)]">
+            <DropdownMenuLabel class="px-2 pb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Menu class="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <div class="font-semibold text-sm">More Tools</div>
+                  <div class="text-xs text-muted-foreground mt-0.5">Additional utilities and features</div>
+                </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator class="mb-2" />
-            <DropdownMenuItem 
-              v-for="item in moreItems" 
-              :key="item.path"
-              class="rounded-lg p-0 focus:bg-accent hover:bg-accent/60 transition-colors"
-            >
-              <router-link 
-                :to="item.path" 
-                class="flex items-start space-x-3 w-full p-3 rounded-lg group"
+            <DropdownMenuSeparator class="mb-3" />
+            <div class="space-y-1">
+              <DropdownMenuItem 
+                v-for="item in moreItems" 
+                :key="item.path"
+                class="h-auto p-0 focus:bg-accent hover:bg-accent/70 transition-all duration-200 rounded-lg"
               >
-                <component 
-                  :is="item.icon" 
-                  class="h-4 w-4 mt-0.5 text-muted-foreground group-hover:text-foreground transition-colors" 
-                />
-                <div class="flex flex-col space-y-1">
-                  <span class="font-medium text-sm group-hover:text-foreground">{{ item.label }}</span>
-                  <span class="text-xs text-muted-foreground leading-tight">{{ item.description }}</span>
-                </div>
-                <ExternalLink 
-                  v-if="item.path === '/'"
-                  class="h-3 w-3 ml-auto mt-0.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" 
-                />
-              </router-link>
-            </DropdownMenuItem>
+                <router-link 
+                  :to="item.path" 
+                  class="flex items-center gap-2 sm:gap-3 w-full p-2 sm:p-3 group"
+                >
+                  <!-- Icon Container -->
+                  <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-background border border-border/60 group-hover:border-primary/30 group-hover:bg-primary/5 flex items-center justify-center transition-all duration-200">
+                    <component 
+                      :is="item.icon" 
+                      class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground group-hover:text-primary group-hover:scale-110 transition-all duration-200" 
+                    />
+                  </div>
+                  
+                  <!-- Tool Info -->
+                  <div class="flex-1 min-w-0">
+                    <div class="font-medium text-sm text-foreground group-hover:text-primary transition-colors duration-200 truncate">
+                      {{ item.label }}
+                    </div>
+                    <div class="text-xs text-muted-foreground group-hover:text-foreground/80 transition-colors duration-200 line-clamp-1 hidden sm:block">
+                      {{ item.description }}
+                    </div>
+                  </div>
+                  
+                  <!-- External Link Indicator -->
+                  <ExternalLink 
+                    v-if="item.path === '/'"
+                    class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground group-hover:text-primary transition-all duration-200" 
+                  />
+                  
+                  <!-- Status Badge -->
+                  <div 
+                    v-else-if="item.status"
+                    class="text-xs px-1.5 sm:px-2 py-1 rounded-full bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-all duration-200"
+                  >
+                    {{ item.status }}
+                  </div>
+                </router-link>
+              </DropdownMenuItem>
+            </div>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -417,6 +514,18 @@ const closeMobileMenu = () => {
           title="Pick color from screen (Alt+P)"
         >
           <Droplet class="h-3 w-3 md:h-4 md:w-4" :class="{ 'animate-pulse': isEyeDropperActive }" />
+        </Button>
+
+        <!-- Fullscreen Toggle / Open in Tab -->
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          class="h-8 w-8 md:h-9 md:w-9 p-0"
+          @click="toggleFullscreen"
+          :title="isChromeExtension() ? 'Open in new tab' : 'Toggle fullscreen (F11)'"
+        >
+          <Maximize v-if="!isFullscreen || isChromeExtension()" class="h-3 w-3 md:h-4 md:w-4" />
+          <Minimize v-else class="h-3 w-3 md:h-4 md:w-4" />
         </Button>
 
         <!-- Window Resizer (Chrome Extension Only) -->
@@ -450,50 +559,74 @@ const closeMobileMenu = () => {
                 <Camera class="h-3 w-3 md:h-4 md:w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" class="w-64 p-2">
-              <DropdownMenuLabel class="px-2 pb-2">
-                <div class="flex items-center space-x-2">
-                  <Camera class="h-4 w-4 text-primary" />
-                  <span>Screen Capture</span>
+            <DropdownMenuContent align="end" class="w-64 sm:w-72 p-3 sm:p-4 max-w-[calc(100vw-2rem)]">
+              <DropdownMenuLabel class="px-2 pb-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Camera class="h-4 w-4 text-primary" />
+                  </div>
+                  <div>
+                    <div class="font-semibold text-sm">Screen Capture</div>
+                    <div class="text-xs text-muted-foreground mt-0.5">Take screenshots and record videos</div>
+                  </div>
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator class="mb-2" />
-              <DropdownMenuItem 
-                @click="takeScreenshot" 
-                class="cursor-pointer rounded-lg p-0 focus:bg-accent hover:bg-accent/60 transition-colors"
-              >
-                <div class="flex items-start space-x-3 w-full p-3 rounded-lg group">
-                  <Camera class="h-4 w-4 mt-0.5 text-muted-foreground group-hover:text-foreground transition-colors" />
-                  <div class="flex flex-col space-y-1">
-                    <span class="font-medium text-sm group-hover:text-foreground">Page Screenshot</span>
-                    <span class="text-xs text-muted-foreground leading-tight">Capture current page</span>
+              <DropdownMenuSeparator class="mb-3" />
+              <div class="space-y-1">
+                <DropdownMenuItem 
+                  @click="takeScreenshot" 
+                  class="cursor-pointer h-auto p-0 focus:bg-accent hover:bg-accent/70 transition-all duration-200 rounded-lg"
+                >
+                  <div class="flex items-center gap-2 sm:gap-3 w-full p-2 sm:p-3 group">
+                    <!-- Icon Container -->
+                    <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-background border border-border/60 group-hover:border-primary/30 group-hover:bg-primary/5 flex items-center justify-center transition-all duration-200">
+                      <Camera class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground group-hover:text-primary group-hover:scale-110 transition-all duration-200" />
+                    </div>
+                    
+                    <!-- Tool Info -->
+                    <div class="flex-1">
+                      <div class="font-medium text-sm text-foreground group-hover:text-primary transition-colors duration-200">Page Screenshot</div>
+                      <div class="text-xs text-muted-foreground group-hover:text-foreground/80 transition-colors duration-200 hidden sm:block">Capture current page</div>
+                    </div>
                   </div>
-                </div>
-              </DropdownMenuItem>
-              <DropdownMenuItem 
-                @click="startScreenRecording" 
-                class="cursor-pointer rounded-lg p-0 focus:bg-accent hover:bg-accent/60 transition-colors"
-              >
-                <div class="flex items-start space-x-3 w-full p-3 rounded-lg group">
-                  <Video class="h-4 w-4 mt-0.5 text-muted-foreground group-hover:text-foreground transition-colors" />
-                  <div class="flex flex-col space-y-1">
-                    <span class="font-medium text-sm group-hover:text-foreground">Screen Recording</span>
-                    <span class="text-xs text-muted-foreground leading-tight">Record entire screen</span>
+                </DropdownMenuItem>
+                
+                <DropdownMenuItem 
+                  @click="startScreenRecording" 
+                  class="cursor-pointer h-auto p-0 focus:bg-accent hover:bg-accent/70 transition-all duration-200 rounded-lg"
+                >
+                  <div class="flex items-center gap-2 sm:gap-3 w-full p-2 sm:p-3 group">
+                    <!-- Icon Container -->
+                    <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-background border border-border/60 group-hover:border-primary/30 group-hover:bg-primary/5 flex items-center justify-center transition-all duration-200">
+                      <Video class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground group-hover:text-primary group-hover:scale-110 transition-all duration-200" />
+                    </div>
+                    
+                    <!-- Tool Info -->
+                    <div class="flex-1">
+                      <div class="font-medium text-sm text-foreground group-hover:text-primary transition-colors duration-200">Screen Recording</div>
+                      <div class="text-xs text-muted-foreground group-hover:text-foreground/80 transition-colors duration-200 hidden sm:block">Record entire screen</div>
+                    </div>
                   </div>
-                </div>
-              </DropdownMenuItem>
-              <DropdownMenuItem 
-                @click="startTabRecording" 
-                class="cursor-pointer rounded-lg p-0 focus:bg-accent hover:bg-accent/60 transition-colors"
-              >
-                <div class="flex items-start space-x-3 w-full p-3 rounded-lg group">
-                  <Monitor class="h-4 w-4 mt-0.5 text-muted-foreground group-hover:text-foreground transition-colors" />
-                  <div class="flex flex-col space-y-1">
-                    <span class="font-medium text-sm group-hover:text-foreground">Tab Recording</span>
-                    <span class="text-xs text-muted-foreground leading-tight">Record current tab</span>
+                </DropdownMenuItem>
+                
+                <DropdownMenuItem 
+                  @click="startTabRecording" 
+                  class="cursor-pointer h-auto p-0 focus:bg-accent hover:bg-accent/70 transition-all duration-200 rounded-lg"
+                >
+                  <div class="flex items-center gap-2 sm:gap-3 w-full p-2 sm:p-3 group">
+                    <!-- Icon Container -->
+                    <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-background border border-border/60 group-hover:border-primary/30 group-hover:bg-primary/5 flex items-center justify-center transition-all duration-200">
+                      <Monitor class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground group-hover:text-primary group-hover:scale-110 transition-all duration-200" />
+                    </div>
+                    
+                    <!-- Tool Info -->
+                    <div class="flex-1">
+                      <div class="font-medium text-sm text-foreground group-hover:text-primary transition-colors duration-200">Tab Recording</div>
+                      <div class="text-xs text-muted-foreground group-hover:text-foreground/80 transition-colors duration-200 hidden sm:block">Record current tab</div>
+                    </div>
                   </div>
-                </div>
-              </DropdownMenuItem>
+                </DropdownMenuItem>
+              </div>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -583,6 +716,17 @@ const closeMobileMenu = () => {
                     >
                       <div class="font-medium">EyeDropper Tool</div>
                       <div class="text-xs text-muted-foreground">Pick color from screen (Alt+P)</div>
+                    </button>
+                    <button
+                      @click="toggleFullscreen(); closeMobileMenu();"
+                      class="w-full text-left block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                    >
+                      <div class="font-medium">
+                        {{ isChromeExtension() ? 'Open in New Tab' : (isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen') }}
+                      </div>
+                      <div class="text-xs text-muted-foreground">
+                        {{ isChromeExtension() ? 'Open tools in a full browser tab' : 'Toggle fullscreen mode (F11)' }}
+                      </div>
                     </button>
                     <router-link
                       v-if="isChromeExtension()"

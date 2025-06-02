@@ -1,10 +1,17 @@
 <template>
-  <div class="p-6 max-w-md mx-auto">
+  <div class="page-container space-y-6">
     <div class="text-center">
-      <h2 class="text-2xl font-bold text-gray-900 mb-4">Screenshot Tools</h2>
-      <p class="text-gray-600 mb-6">
-        Capture screenshots of the current tab - visible area only or entire page.
-      </p>
+      <div class="heading-group">
+        <h1>Screenshot Tools</h1>
+        <p>Capture screenshots of the current tab - visible area only or entire page</p>
+      </div>
+      <!-- Extension Alert -->
+      <ExtensionRequired
+        class="text-left"
+        ref="extensionAlert"
+        message="Screenshot functionality is not available."
+      />
+
 
       <div class="space-y-4">
         <!-- Tab Screenshot (Visible Area) -->
@@ -102,19 +109,20 @@
           {{ isCapturing ? 'Capturing...' : 'Full Page Screenshot' }}
         </Button>
 
-        <div v-if="!isAvailable" class="text-red-600 text-sm">
-          Screenshot functionality is not available. Make sure you're running this as a Chrome extension.
-        </div>
 
-        <div v-if="lastResult" class="text-sm" :class="lastResult.success ? 'text-green-600' : 'text-red-600'">
-          {{ lastResult.message || lastResult.error }}
+        <!-- Result Message -->
+        <div v-if="lastResult" class="rounded-lg p-4" :class="lastResult.success ? 'bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800' : 'bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800'">
+          <div class="text-sm font-medium" :class="lastResult.success ? 'text-green-800 dark:text-green-200' : 'text-red-800 dark:text-red-200'">
+            {{ lastResult.message || lastResult.error }}
+          </div>
         </div>
       </div>
 
+      <!-- Feature Information -->
       <div class="mt-8 text-left space-y-6">
-        <div>
-          <h3 class="text-lg font-semibold mb-3">Tab Screenshot (Visible Area):</h3>
-          <ul class="text-sm text-gray-600 space-y-2">
+        <div class="bg-card border border-border rounded-lg p-4">
+          <h3 class="text-lg font-semibold mb-3 text-foreground">Tab Screenshot (Visible Area):</h3>
+          <ul class="text-sm text-muted-foreground space-y-2">
             <li class="flex items-start">
               <span class="flex-shrink-0 w-2 h-2 bg-green-500 rounded-full mt-2 mr-3"></span>
               Captures only what's currently visible in the browser viewport
@@ -130,23 +138,23 @@
           </ul>
         </div>
 
-        <div>
-          <h3 class="text-lg font-semibold mb-3">Full Page Screenshot:</h3>
-          <ul class="text-sm text-gray-600 space-y-2">
+        <div class="bg-card border border-border rounded-lg p-4">
+          <h3 class="text-lg font-semibold mb-3 text-foreground">Full Page Screenshot:</h3>
+          <ul class="text-sm text-muted-foreground space-y-2">
             <li class="flex items-start">
-              <span class="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></span>
+              <span class="flex-shrink-0 w-2 h-2 bg-primary rounded-full mt-2 mr-3"></span>
               Captures the entire page including content below the fold
             </li>
             <li class="flex items-start">
-              <span class="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></span>
+              <span class="flex-shrink-0 w-2 h-2 bg-primary rounded-full mt-2 mr-3"></span>
               Automatically detects the full height of the page
             </li>
             <li class="flex items-start">
-              <span class="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></span>
+              <span class="flex-shrink-0 w-2 h-2 bg-primary rounded-full mt-2 mr-3"></span>
               Uses advanced techniques to capture scrolling content
             </li>
             <li class="flex items-start">
-              <span class="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></span>
+              <span class="flex-shrink-0 w-2 h-2 bg-primary rounded-full mt-2 mr-3"></span>
               Downloads automatically as PNG file
             </li>
           </ul>
@@ -157,16 +165,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import Button from '@/components/ui/button/Button.vue';
+import ExtensionRequired from '@/components/ExtensionRequired.vue';
 import { ScreenshotService, type ScreenshotResponse } from '@/services/screenshotService';
 
 const isCapturing = ref(false);
-const isAvailable = ref(false);
 const lastResult = ref<ScreenshotResponse | null>(null);
+const extensionAlert = ref();
 
-onMounted(() => {
-  isAvailable.value = ScreenshotService.isAvailable();
+// Get availability from the ExtensionRequired component
+const isAvailable = computed(() => {
+  return extensionAlert.value?.isAvailable || false;
 });
 
 const captureTabScreenshot = async () => {
