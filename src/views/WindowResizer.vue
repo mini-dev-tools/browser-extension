@@ -192,7 +192,6 @@ export default defineComponent({
         />
         <button 
           class="bg-primary text-primary-foreground hover:bg-primary/90 px-3 py-1 rounded text-xs font-medium transition-colors duration-200 ml-auto"
-          :disabled="!isAvailable"
           @click="customResize()"
         >
           Resize
@@ -212,8 +211,7 @@ export default defineComponent({
         v-for="(preset, index) in presets"
         :key="index"
         class="group bg-card hover:bg-accent border border-border hover:border-primary/20 rounded-md p-2 cursor-pointer transition-all duration-200"
-        :class="{ 'opacity-50 cursor-not-allowed': !isAvailable }"
-        @click="isAvailable && ResizeWindowByPresetIndex(index)"
+        @click="ResizeWindowByPresetIndex(index)"
       >
         <div class="flex items-center gap-2">
           <!-- Compact Device Icon -->

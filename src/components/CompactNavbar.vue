@@ -377,7 +377,7 @@ const closeMobileMenu = () => {
               <ChevronDown class="h-3 w-3 ml-1" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent class="w-72 sm:w-80 p-3 sm:p-4 max-w-[calc(100vw-2rem)]">
+          <DropdownMenuContent class="w-72 sm:w-80 p-3 sm:p-4 max-w-[calc(100vw-2rem)] max-h-[550px] overflow-y-auto">
             <DropdownMenuLabel class="px-2 pb-3">
               <div class="flex items-center gap-3">
                 <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -559,7 +559,7 @@ const closeMobileMenu = () => {
                 <Camera class="h-3 w-3 md:h-4 md:w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" class="w-64 sm:w-72 p-3 sm:p-4 max-w-[calc(100vw-2rem)]">
+            <DropdownMenuContent align="end" class="w-64 sm:w-72 p-3 sm:p-4 max-w-[calc(100vw-2rem)] max-h-[400px] overflow-y-auto">
               <DropdownMenuLabel class="px-2 pb-3">
                 <div class="flex items-center gap-3">
                   <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
