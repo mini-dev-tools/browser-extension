@@ -128,6 +128,10 @@ import yaml from 'js-yaml'
 // Swagger UI types
 interface SwaggerUIBundle {
   (options: any): any
+  presets: {
+    apis: any
+    standalone: any
+  }
 }
 
 declare global {
@@ -239,7 +243,7 @@ const sampleFiles = [
 const loadSwaggerUI = () => {
   return new Promise<void>((resolve) => {
     // Check if Swagger UI is already loaded
-    if (window.SwaggerUIBundle) {
+    if (typeof (window as any).SwaggerUIBundle !== 'undefined') {
       resolve()
       return
     }
@@ -247,13 +251,17 @@ const loadSwaggerUI = () => {
     // Load Swagger UI CSS
     const link = document.createElement('link')
     link.rel = 'stylesheet'
-    link.href = '/node_modules/swagger-ui-dist/swagger-ui.css'
+    link.href = '/swagger-ui/swagger-ui.css'
     document.head.appendChild(link)
 
     // Load Swagger UI JS
     const script = document.createElement('script')
-    script.src = '/node_modules/swagger-ui-dist/swagger-ui-bundle.js'
+    script.src = '/swagger-ui/swagger-ui-bundle.js'
     script.onload = () => resolve()
+    script.onerror = (error) => {
+      console.error('Failed to load Swagger UI:', error)
+      resolve()
+    }
     document.head.appendChild(script)
   })
 }
