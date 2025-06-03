@@ -26,7 +26,8 @@ import {
   Book,
   Lock,
   Clock,
-  Binary
+  Binary,
+  Eye
 } from 'lucide-vue-next'
 
 export interface NavigationItem {
@@ -228,6 +229,13 @@ export const navigationSections: NavigationSection[] = [
         status: 'beta'
       },
       {
+        label: 'WhatsApp Blur',
+        path: '/whatsapp-blur',
+        description: 'Privacy blur for WhatsApp Web',
+        icon: Eye,
+        status: 'new'
+      },
+      {
         label: 'Settings',
         path: '/settings',
         description: 'App settings',
@@ -307,6 +315,7 @@ export const iconSvgMap: Record<string, string> = {
   TestTube: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5a.5.5 0 00-.5.5v.5c0 .5.5.5.5.5h13s.5 0 .5-.5v-.5a.5.5 0 00-.5-.5l-4.091-4.091a2.25 2.25 0 01-.659-1.591V3.104a48.554 48.554 0 00-4.5 0z" /></svg>',
   ImageIcon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 12.75h.008v.008H18V12.75Z" /></svg>',
   Book: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0118 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>',
+  Eye: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>',
 }
 
 // Get SVG string for icon component

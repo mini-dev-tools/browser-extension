@@ -161,6 +161,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/swagger-viewer',
     name: 'swagger-viewer',
     component: () => import('../views/SwaggerViewer.vue')
+  },
+  {
+    path: '/whatsapp-blur',
+    name: 'whatsapp-blur',
+    component: () => import('../views/WhatsAppBlur.vue')
   }
 ];
 

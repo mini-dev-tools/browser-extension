@@ -5,7 +5,10 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --noEmit && vite build && cp public/manifest.json public/background.js public/offscreen.html public/offscreen.js public/content.js public/whatsapp-blur.js dist/",
+    "watch": "vite build --watch",
+    "watch:public": "node scripts/watch.js",
+    "watch:all": "npm run watch & npm run watch:public",
     "build.bak": "vue-tsc --noEmit && vite build && cp public/manifest.json dist/manifest.json && cp public/background.js public/offscreen.html public/offscreen.js public/content.js dist/",
     "preview": "vite preview",
     "build:analyze": "vite build --mode analyze",

@@ -38,7 +38,9 @@ declare global {
       };
     };
     tabs: {
-      query: (queryInfo: { active?: boolean; currentWindow?: boolean }) => Promise<Array<{ id?: number; url?: string }>>;
+      query: (queryInfo: { active?: boolean; currentWindow?: boolean; url?: string | string[] }) => Promise<Array<{ id?: number; url?: string }>>;
+      create: (createProperties: { url?: string; active?: boolean }) => Promise<{ id?: number }>;
+      sendMessage: (tabId: number, message: any, callback?: (response: any) => void) => void;
     };
     scripting: {
       executeScript: (injection: {

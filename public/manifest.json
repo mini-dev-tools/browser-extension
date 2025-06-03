@@ -39,6 +39,11 @@
     {
       "matches": ["<all_urls>"],
       "js": ["content.js"]
+    },
+    {
+      "matches": ["*://web.whatsapp.com/*"],
+      "js": ["whatsapp-blur.js"],
+      "run_at": "document_end"
     }
   ],
   "web_accessible_resources": [
