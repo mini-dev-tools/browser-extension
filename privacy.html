@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    
+    <!-- SEO Meta Tags -->
+    <title>Privacy Policy - Mini Dev Tools | Chrome Extension & Web App</title>
+    <meta name="description" content="Privacy Policy for Mini Dev Tools Chrome Extension. Learn how we protect your data and respect your privacy. All processing happens locally, no data collection." />
+    <meta name="keywords" content="privacy policy, mini dev tools, chrome extension privacy, data protection, developer tools privacy" />
+    <meta name="author" content="Basheer Chamoun" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://minidevtools.com/privacy" />
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Privacy Policy - Mini Dev Tools" />
+    <meta property="og:description" content="Privacy Policy for Mini Dev Tools Chrome Extension. All processing happens locally, no data collection." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://minidevtools.com/privacy" />
+    <meta property="og:image" content="/web-assets/main.png" />
+    <meta property="og:site_name" content="Mini Dev Tools" />
+    
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Privacy Policy - Mini Dev Tools" />
+    <meta name="twitter:description" content="Privacy Policy for Mini Dev Tools Chrome Extension. All processing happens locally, no data collection." />
+    <meta name="twitter:image" content="/web-assets/main.png" />
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/web-assets/favicon.ico" />
+    <link rel="apple-touch-icon" href="/web-assets/main.png" />
+    
+    <style>
+      /* Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #fafafa;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      /* Container */
+      .container {
+        max-width: 1024px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      
+      @media (min-width: 768px) {
+        .container {
+          padding: 40px 20px;
+        }
+      }
+      
+      /* Header */
+      header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding-bottom: 30px;
+        border-bottom: 2px solid #e9ecef;
+      }
+      
+      .logo {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        display: block;
+      }
+      
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 10px;
+      }
+      
+      .subtitle {
+        font-size: 1.1rem;
+        color: #6c757d;
+      }
+      
+      /* Content */
+      .content {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      
+      @media (min-width: 768px) {
+        .content {
+          padding: 50px;
+        }
+      }
+      
+      h2 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #3F51B5;
+        margin: 40px 0 20px;
+        padding-top: 20px;
+      }
+      
+      h2:first-child {
+        margin-top: 0;
+        padding-top: 0;
+      }
+      
+      h3 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 30px 0 15px;
+      }
+      
+      p, li {
+        font-size: 1rem;
+        color: #495057;
+        margin-bottom: 15px;
+      }
+      
+      ul {
+        margin-left: 30px;
+        margin-bottom: 20px;
+      }
+      
+      li {
+        margin-bottom: 10px;
+      }
+      
+      /* Feature Box */
+      .feature-box {
+        background: #f8f9fa;
+        border-left: 4px solid #3F51B5;
+        padding: 20px;
+        margin: 30px 0;
+        border-radius: 4px;
+      }
+      
+      .feature-box h3 {
+        color: #3F51B5;
+        margin-top: 0;
+      }
+      
+      /* Privacy Highlights */
+      .privacy-highlights {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin: 40px 0;
+      }
+      
+      .highlight-card {
+        background: #f8f9fa;
+        padding: 25px;
+        border-radius: 8px;
+        text-align: center;
+        transition: transform 0.2s;
+      }
+      
+      .highlight-card:hover {
+        transform: translateY(-2px);
+      }
+      
+      .highlight-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+      }
+      
+      .highlight-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 10px;
+      }
+      
+      /* Footer */
+      footer {
+        text-align: center;
+        margin-top: 60px;
+        padding-top: 40px;
+        border-top: 1px solid #e9ecef;
+        color: #6c757d;
+      }
+      
+      .footer-links {
+        margin-bottom: 20px;
+      }
+      
+      .footer-links a {
+        color: #3F51B5;
+        text-decoration: none;
+        margin: 0 15px;
+        transition: color 0.2s;
+      }
+      
+      .footer-links a:hover {
+        color: #283593;
+      }
+      
+      /* Responsive */
+      @media (max-width: 767px) {
+        h1 {
+          font-size: 2rem;
+        }
+        
+        h2 {
+          font-size: 1.5rem;
+        }
+        
+        .content {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="/assets/icons/icon-tools-128.png" alt="Mini Dev Tools Logo" class="logo">
+        <h1>Privacy Policy</h1>
+        <p class="subtitle">Mini Dev Tools Chrome Extension & Web App</p>
+      </header>
+      
+      <div class="content">
+        <p><strong>Last Updated: March 6, 2025</strong></p>
+        
+        <h2>Your Privacy Matters</h2>
+        <p>At Mini Dev Tools, we are committed to protecting your privacy. This privacy policy explains how our Chrome extension and web application handle your data.</p>
+        
+        <div class="privacy-highlights">
+          <div class="highlight-card">
+            <div class="highlight-icon">🔒</div>
+            <div class="highlight-title">100% Local Processing</div>
+            <p>All tools process data locally in your browser. Nothing is sent to external servers.</p>
+          </div>
+          
+          <div class="highlight-card">
+            <div class="highlight-icon">🚫</div>
+            <div class="highlight-title">No Data Collection</div>
+            <p>We don't collect, store, or track any personal information or usage data.</p>
+          </div>
+          
+          <div class="highlight-card">
+            <div class="highlight-icon">🛡️</div>
+            <div class="highlight-title">No Analytics</div>
+            <p>We don't use Google Analytics or any other tracking services.</p>
+          </div>
+        </div>
+        
+        <h2>Information We Don't Collect</h2>
+        <p>Mini Dev Tools is designed with privacy-first principles. We do NOT collect:</p>
+        <ul>
+          <li>Personal identification information</li>
+          <li>Usage statistics or analytics</li>
+          <li>Input data from any tools</li>
+          <li>Browsing history or activity</li>
+          <li>IP addresses or location data</li>
+          <li>Device information</li>
+          <li>Cookies or tracking identifiers</li>
+        </ul>
+        
+        <h2>How Our Tools Work</h2>
+        <p>All Mini Dev Tools functionality operates entirely within your browser:</p>
+        
+        <h3>Color Tools</h3>
+        <ul>
+          <li>Color picking, palette generation, and contrast checking happen locally</li>
+          <li>Saved palettes are stored in your browser's local storage</li>
+          <li>No color data is transmitted externally</li>
+        </ul>
+        
+        <h3>Text & Utility Tools</h3>
+        <ul>
+          <li>Text processing, encoding/decoding, and generation occur in-browser</li>
+          <li>Generated passwords, UUIDs, and hashes are created locally</li>
+          <li>No input or output data leaves your device</li>
+        </ul>
+        
+        <h3>File Operations</h3>
+        <ul>
+          <li>File downloads are generated directly in your browser</li>
+          <li>Uploaded files (e.g., for Swagger viewer) are processed locally</li>
+          <li>Files are never uploaded to any server</li>
+        </ul>
+        
+        <h2>Chrome Extension Permissions</h2>
+        <p>Our Chrome extension requires certain permissions to function. Here's why we need each one:</p>
+        
+        <div class="feature-box">
+          <h3>Required Permissions</h3>
+          <ul>
+            <li><strong>activeTab:</strong> To interact with the current tab for features like color picking</li>
+            <li><strong>tabs:</strong> To manage browser tabs for the window resizer tool</li>
+            <li><strong>windows:</strong> To resize browser windows</li>
+            <li><strong>downloads:</strong> To save generated files to your computer</li>
+            <li><strong>storage:</strong> To save your preferences and tool settings locally</li>
+            <li><strong>contextMenus:</strong> To provide right-click functionality</li>
+            <li><strong>scripting:</strong> To inject color picker functionality</li>
+            <li><strong>desktopCapture:</strong> For screenshot functionality</li>
+          </ul>
+          <p><strong>Important:</strong> These permissions are only used for the described functionality. We never use them to collect or transmit data.</p>
+        </div>
+        
+        <h2>Local Storage</h2>
+        <p>Mini Dev Tools uses your browser's local storage to:</p>
+        <ul>
+          <li>Save your tool preferences and settings</li>
+          <li>Store custom color palettes</li>
+          <li>Remember your recent colors and tool history</li>
+          <li>Cache tool states for better user experience</li>
+        </ul>
+        <p>This data never leaves your device and can be cleared at any time through your browser settings.</p>
+        
+        <h2>Third-Party Services</h2>
+        <p>Mini Dev Tools does NOT use any third-party services for:</p>
+        <ul>
+          <li>Analytics or tracking</li>
+          <li>Advertising</li>
+          <li>Data processing</li>
+          <li>Cloud storage</li>
+          <li>External APIs</li>
+        </ul>
+        
+        <h2>Data Security</h2>
+        <p>Since all processing happens locally in your browser:</p>
+        <ul>
+          <li>Your data never travels over the internet</li>
+          <li>There's no risk of server breaches affecting your data</li>
+          <li>You have complete control over your information</li>
+          <li>Clearing browser data removes all stored information</li>
+        </ul>
+        
+        <h2>Children's Privacy</h2>
+        <p>Mini Dev Tools is a general-purpose developer tool and does not knowingly collect information from children under 13 years of age.</p>
+        
+        <h2>Changes to This Policy</h2>
+        <p>We may update this privacy policy from time to time. Any changes will be reflected on this page with an updated revision date. Since we don't collect user data, we cannot notify you directly of changes, so we encourage you to review this policy periodically.</p>
+        
+        <h2>Open Source Transparency</h2>
+        <p>Mini Dev Tools is committed to transparency. Our code is open source, allowing anyone to verify our privacy practices by examining the source code directly.</p>
+        
+        <h2>Contact Information</h2>
+        <p>If you have any questions or concerns about this privacy policy or Mini Dev Tools' privacy practices, please contact us:</p>
+        <ul>
+          <li><strong>Developer:</strong> Baheer Shanoum (Basheer Chamoun)</li>
+          <li><strong>GitHub:</strong> <a href="https://github.com/mini-dev-tools/browser-extension" target="_blank">Project Repository</a></li>
+          <li><strong>Issues:</strong> <a href="https://github.com/mini-dev-tools/browser-extension/issues" target="_blank">Report Issues</a></li>
+        </ul>
+        
+        <div class="feature-box" style="margin-top: 40px; text-align: center; background: #e8f4fd; border-color: #2196F3;">
+          <h3 style="color: #2196F3; margin-bottom: 10px;">🎯 Privacy-First by Design</h3>
+          <p style="margin: 0;">Mini Dev Tools is built with your privacy in mind. All processing happens locally, ensuring your data stays on your device.</p>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="footer-links">
+          <a href="/">Home</a>
+          <a href="/web-tools.html">Web Tools</a>
+          <a href="https://github.com/mini-dev-tools/browser-extension" target="_blank">GitHub</a>
+        </div>
+        <p>&copy; 2025 Mini Dev Tools. All rights reserved.</p>
+      </footer>
+    </div>
+  </body>
+</html>

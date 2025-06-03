@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Arzs mini dev tools",
-  "version": "0.0.1",
-  "version_name": "0.0.1",
-  "description": "Arzs mini dev tools",
-  "author": "Baheer Shanoum",
+  "name": "Mini Dev Tools",
+  "version": "0.1.0",
+  "version_name": "0.1.0",
+  "description": "Developer Swiss Army knife - color, text, encoding & utility tools. 100% private, open source, zero tracking.",
+  "author": "Basheer Chamoun",
 
   "permissions": [
     "activeTab", 
@@ -33,7 +33,7 @@
   "options_page": "web-tools.html",
   "action": {
     "default_popup": "./pop.html",
-    "default_title": "Extension"
+    "default_title": "Mini Dev Tools"
   },
   "content_scripts": [
     {

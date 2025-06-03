@@ -145,7 +145,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/quick-files',
     name: 'quick-files',
-    component: () => import('../views/QuickFiles.vue')
+    component: () => import('../views/ComingSoon.vue')
   },
   {
     path: '/test',

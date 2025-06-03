@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import vue from '@vitejs/plugin-vue';
+// import { visualizer } from 'rollup-plugin-visualizer';
 
 const root = resolve(__dirname);
 const outDir = resolve(__dirname, 'dist');
@@ -9,7 +10,13 @@ const outDir = resolve(__dirname, 'dist');
 export default defineConfig({
   plugins: [
     vue(),
-
+    // visualizer({
+    //   filename: './dist/stats.html',
+    //   open: true,
+    //   gzipSize: true,
+    //   brotliSize: true,
+    //   template: 'treemap', // or 'sunburst', 'network', 'raw-data', 'list'
+    // }),
   ],
   resolve: {
     alias: {

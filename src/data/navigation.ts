@@ -85,6 +85,7 @@ export const navigationSections: NavigationSection[] = [
         label: 'JWT Token Tool',
         path: '/jwt',
         description: 'Decode/generate JWT tokens',
+        status: 'beta',
         icon: Key
       },
       {
@@ -122,7 +123,8 @@ export const navigationSections: NavigationSection[] = [
         label: 'Quick Files',
         path: '/quick-files',
         description: 'File operations',
-        icon: Files
+        icon: Files,
+        status: 'soon',
       },
       {
         label: 'Text to Ipsum',
@@ -134,6 +136,7 @@ export const navigationSections: NavigationSection[] = [
         label: 'Minify',
         path: '/minify',
         description: 'Minify code and text',
+        status: 'soon',
         icon: Scissors
       },
       {
@@ -213,6 +216,8 @@ export const navigationSections: NavigationSection[] = [
         path: '/script-injection',
         description: 'Inject JS and CSS code',
         icon: Syringe,
+        status: 'beta'
+
         // chromeExtensionOnly: true
       },
       {
@@ -220,7 +225,7 @@ export const navigationSections: NavigationSection[] = [
         path: '/block-url',
         description: 'Block website access',
         icon: Shield,
-        status: 'soon'
+        status: 'beta'
       },
       {
         label: 'Settings',

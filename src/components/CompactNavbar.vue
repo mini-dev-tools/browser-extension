@@ -277,7 +277,7 @@ const toggleFullscreen = async () => {
   if (isChromeExtension()) {
     try {
       // Open the extension's options page (which should be the web version)
-      const url = (chrome.runtime as any).getURL('index.html');
+      const url = (chrome.runtime as any).getURL('web-tools.html');
       await (chrome.tabs as any).create({ url });
     } catch (error) {
       console.warn('Failed to open options page:', error);
