@@ -12,7 +12,7 @@
         @input="$emit('update:modelValue', $event.target.value)"
       />
       <button @click="copy">
-        <i class="fa fa-clone"></i>
+        📋
       </button>
     </div>
   </div>

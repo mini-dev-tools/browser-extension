@@ -4,10 +4,14 @@ import { VAceEditor } from 'vue3-ace-editor';
 import 'brace/mode/text';
 import 'brace/mode/python';
 import 'brace/mode/javascript';
+import 'brace/mode/html';
+import 'brace/mode/css';
+import 'brace/mode/json';
 import 'brace/mode/php';
 import 'brace/mode/less';
 import 'brace/mode/twig';
 import 'brace/mode/sql';
+import 'brace/mode/markdown';
 import 'brace/theme/chrome';
 import 'brace/theme/eclipse';
 import 'brace/theme/monokai';
@@ -30,15 +34,19 @@ interface FileType {
 }
 
 const mainStore = useMainStore();
-const theme = computed(() => mainStore.isDark ? 'eclipse' : 'tomorrow_night');
+const theme = computed(() => mainStore.isDark ? 'tomorrow_night' : 'eclipse');
 const loading = ref(false);
 
 const fileTypes: FileType[] = [
   { extension: '.txt', mime: 'text/plain', label: 'text', aceName: 'text' },
+  { extension: '.md', mime: 'text/markdown', label: 'markdown', aceName: 'markdown' },
   { extension: '.py', mime: 'text/x-python', label: 'python', aceName: 'python' },
-  { extension: '.sql', mime: 'text/sql', label: 'sql', aceName: 'sql' },
+  { extension: '.js', mime: 'text/javascript', label: 'javascript', aceName: 'javascript' },
   { extension: '.html', mime: 'text/html', label: 'html', aceName: 'html' },
-  { extension: '.js', mime: 'text/javascript', label: 'javascript', aceName: 'javascript' }
+  { extension: '.css', mime: 'text/css', label: 'css', aceName: 'css' },
+  { extension: '.json', mime: 'application/json', label: 'json', aceName: 'json' },
+  { extension: '.sql', mime: 'text/sql', label: 'sql', aceName: 'sql' },
+  { extension: '.php', mime: 'text/x-php', label: 'php', aceName: 'php' }
 ];
 
 const fileObj = ref({
@@ -49,10 +57,10 @@ const fileObj = ref({
 });
 
 const lang = ref<FileType>({
-  extension: '.py',
-  mime: 'text/x-python',
-  label: 'python',
-  aceName: 'python'
+  extension: '.txt',
+  mime: 'text/plain',
+  label: 'text',
+  aceName: 'text'
 });
 
 const dropHandler = (ev: DragEvent) => {
@@ -90,8 +98,18 @@ const updateFileLang = () => {
 
 const insertFile = (file: File) => {
   loading.value = true;
-  fileObj.value.name = file.name.replace(/\.[^/.]+$/, '');
+  const fileName = file.name;
+  const fileExtension = fileName.substring(fileName.lastIndexOf('.'));
+  
+  fileObj.value.name = fileName.replace(/\.[^/.]+$/, '');
   fileObj.value.mime = file.type;
+
+  // Auto-detect file type based on extension
+  const detectedType = fileTypes.find(type => type.extension === fileExtension);
+  if (detectedType) {
+    lang.value = detectedType;
+    updateFileLang();
+  }
 
   const reader = new FileReader();
   reader.onload = () => {
@@ -193,7 +211,6 @@ const selectedLangValue = computed({
       <Card>
         <CardContent class="p-0">
           <v-ace-editor
-            v-if="fileObj.mime !== 'text/markdown'"
             v-model:value="fileObj.content"
             :lang="lang.aceName"
             :theme="theme"
@@ -201,6 +218,11 @@ const selectedLangValue = computed({
             :readonly="loading"
             :wrap="true"
             :printMargin="false"
+            :fontSize="14"
+            :showGutter="true"
+            :highlightActiveLine="true"
+            :tabSize="2"
+            :useSoftTabs="true"
             class="min-h-[500px] rounded-md"
             placeholder="Drag and drop a file here, upload one, or start typing..."
           />

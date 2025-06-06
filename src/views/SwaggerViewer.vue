@@ -92,9 +92,11 @@
                 variant="outline"
                 size="sm"
                 class="justify-start"
+                :title="sample.url ? 'Note: This loads content from an external source' : 'Local example'"
               >
                 <Code class="w-3 h-3 mr-2" />
                 {{ sample.name }}
+                <span v-if="sample.url" class="ml-1 text-xs text-orange-500">🌐</span>
               </Button>
             </div>
           </div>
@@ -102,15 +104,15 @@
       </Card>
 
       <!-- Swagger UI Container -->
-      <div v-if="swaggerSpec" class="border rounded-lg">
+      <div v-if="swaggerSpec" class="border rounded-lg bg-white">
         <div class="flex justify-between items-center p-4 border-b bg-gray-50">
-          <h3>API Documentation</h3>
+          <h3 class="text-gray-900">API Documentation</h3>
           <Button @click="clearContent" variant="outline" size="sm">
             <X class="w-4 h-4 mr-2" />
             Clear
           </Button>
         </div>
-        <div id="swagger-ui" class="p-4"></div>
+        <div id="swagger-ui" class="p-4 bg-white text-gray-900"></div>
       </div>
     </div>
   </div>
@@ -478,9 +480,17 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* Force light theme for Swagger UI container since Swagger UI doesn't support dark mode */
+.swagger-container {
+  background-color: white !important;
+  color: #1f2937 !important;
+}
+
 /* Override Swagger UI styles for better integration */
 :deep(#swagger-ui) {
   font-family: inherit;
+  background-color: white !important;
+  color: #1f2937 !important;
 }
 
 :deep(.swagger-ui .topbar) {
@@ -489,5 +499,60 @@ onMounted(() => {
 
 :deep(.swagger-ui .info) {
   margin: 0;
+}
+
+/* Ensure all Swagger UI elements maintain light theme */
+:deep(.swagger-ui) {
+  background-color: white !important;
+}
+
+:deep(.swagger-ui *) {
+  color: inherit !important;
+}
+
+:deep(.swagger-ui .scheme-container) {
+  background-color: #f9fafb !important;
+}
+
+:deep(.swagger-ui .opblock) {
+  background-color: white !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+:deep(.swagger-ui .opblock .opblock-summary) {
+  border-color: #e5e7eb !important;
+}
+
+:deep(.swagger-ui .response-col_status) {
+  color: #1f2937 !important;
+}
+
+:deep(.swagger-ui .response-col_description) {
+  color: #374151 !important;
+}
+
+:deep(.swagger-ui .model-box) {
+  background-color: #f9fafb !important;
+}
+
+:deep(.swagger-ui .model) {
+  color: #1f2937 !important;
+}
+
+/* Ensure input fields are readable */
+:deep(.swagger-ui input[type=text], .swagger-ui input[type=password], .swagger-ui textarea) {
+  background-color: white !important;
+  color: #1f2937 !important;
+  border: 1px solid #d1d5db !important;
+}
+
+/* Button styles */
+:deep(.swagger-ui .btn) {
+  background-color: #3b82f6 !important;
+  color: white !important;
+}
+
+:deep(.swagger-ui .btn.cancel) {
+  background-color: #6b7280 !important;
 }
 </style>

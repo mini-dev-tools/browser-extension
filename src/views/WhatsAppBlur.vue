@@ -157,6 +157,35 @@
           </div>
         </CardContent>
       </Card>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle>Keyboard Shortcuts</CardTitle>
+          <CardDescription>
+            Quick controls when using WhatsApp Web
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div class="space-y-3 text-sm">
+            <div class="flex items-center justify-between">
+              <span class="font-mono bg-muted px-2 py-1 rounded">Alt + X</span>
+              <span class="text-muted-foreground">Toggle all blur</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="font-mono bg-muted px-2 py-1 rounded">Alt + M</span>
+              <span class="text-muted-foreground">Toggle messages blur</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="font-mono bg-muted px-2 py-1 rounded">Alt + I</span>
+              <span class="text-muted-foreground">Toggle images blur</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="font-mono bg-muted px-2 py-1 rounded">Alt + N</span>
+              <span class="text-muted-foreground">Toggle names blur</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   </div>
 </template>

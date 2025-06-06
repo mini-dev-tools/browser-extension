@@ -23,7 +23,7 @@ export default defineComponent({
           resizeTarget: 'window',
           width: 320,
           height: 568,
-          icon: 'fa fa-mobile',
+          icon: '📱',
           description: 'Iphone 5',
           position: {
             options: 'unchanged', /// Options: unchanged + center + custom
@@ -47,7 +47,7 @@ export default defineComponent({
           resizeTarget: 'window',
           width: 1024,
           height: 768,
-          icon: 'fa fa-tablet',
+          icon: '📟',
           description: 'Ipad',
           position: {
             options: 'unchanged', /// Options: unchanged + center + custom
@@ -59,7 +59,7 @@ export default defineComponent({
           resizeTarget: 'window',
           width: 1440,
           height: 900,
-          icon: 'fa fa-laptop',
+          icon: '💻',
           description: 'Laptop',
           position: {
             options: 'unchanged', /// Options: unchanged + center + custom
@@ -71,7 +71,7 @@ export default defineComponent({
           resizeTarget: 'window',
           width: 1680,
           height: 1050,
-          icon: 'fa fa-desktop',
+          icon: '🖥️',
           description: 'Desktop small',
           position: {
             options: 'unchanged', /// Options: unchanged + center + custom
@@ -84,7 +84,7 @@ export default defineComponent({
           resizeTarget: 'window',
           width: 1920,
           height: 1080,
-          icon: 'fa fa-tv',
+          icon: '📺',
           description: 'Desktop 2',
           position: {
             options: 'unchanged', /// Options: unchanged + center + custom
@@ -216,7 +216,7 @@ export default defineComponent({
         <div class="flex items-center gap-2">
           <!-- Compact Device Icon -->
           <div class="w-6 h-6 bg-primary/10 rounded flex items-center justify-center group-hover:bg-primary/15 transition-colors duration-200 flex-shrink-0">
-            <i :class="[preset.icon, 'text-primary text-xs group-hover:scale-110 transition-transform duration-200']"></i>
+            <span class="text-sm group-hover:scale-110 transition-transform duration-200">{{ preset.icon }}</span>
           </div>
           
           <!-- Compact Device Info -->

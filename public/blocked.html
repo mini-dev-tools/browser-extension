@@ -140,7 +140,8 @@
             if (window.history.length > 1) {
                 window.history.back();
             } else {
-                window.location.href = 'https://www.google.com';
+                // No history available - stay on current page
+                alert('No previous page to go back to. Use the address bar to navigate.');
             }
         }
         
