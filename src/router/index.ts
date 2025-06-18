@@ -20,9 +20,9 @@ const routes: Array<RouteRecordRaw> = [
   },
 
   {
-    path: '/ipsum',
-    name: 'ipsum',
-    component: () => import('../views/Ipsum.vue')
+    path: '/text-tools',
+    name: 'text-tools',
+    component: () => import('../views/TextTools.vue')
   },
   {
     path: '/password',
@@ -65,17 +65,6 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/TimestampConverter.vue')
   },
 
-  {
-    path: '/text-info',
-    name: 'text-info',
-    component: () => import('../views/TextInfo.vue')
-  },
-
-  {
-    path: '/text-to-ipsum',
-    name: 'text-to-ipsum',
-    component: () => import('../views/TextToIpsum.vue')
-  },
   {
     path: '/minify',
     name: 'minify',
@@ -145,7 +134,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/quick-files',
     name: 'quick-files',
-    component: () => import('../views/ComingSoon.vue')
+    component: () => import('../views/QuickFiles.vue')
   },
   {
     path: '/test',

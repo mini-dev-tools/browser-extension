@@ -158,9 +158,6 @@ l1042 1043 243 -17 c286 -20 289 -20 346 76 89 149 670 1207 679 1237 21 69 5
             <li class="mr-3">
               <a class="toggleColour inline-block text-white no-underline hover:text-gray-300 hover:text-underline py-2 px-4" href="/web-tools.html">Web Tools</a>
             </li>
-            <li class="mr-3">
-              <a class="toggleColour inline-block text-white no-underline hover:text-gray-300 hover:text-underline py-2 px-4" href="#news">News</a>
-            </li>
           </ul>
           <a href="mailto:support@minidevtools.com">
           <button
@@ -416,21 +413,6 @@ l1042 1043 243 -17 c286 -20 289 -20 346 76 89 149 670 1207 679 1237 21 69 5
         </div>
       </div>
     </section>
-    <section class="bg-white border-b py-8" id="news">
-      <div class="container mx-auto flex flex-wrap pt-4 pb-12">
-        <h1 class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800">
-          News
-        </h1>
-        <div class="w-full mb-4">
-          <div class="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
-        </div>
-
-        <div class="w-full text-black text-2xl text-center py-40">
-                No News Available
-        </div>
-
-      </div>
-    </section>
 
     <!-- Developer Tools Section -->
     <section class="bg-gray-50 border-b py-12" id="tools">
@@ -457,8 +439,8 @@ l1042 1043 243 -17 c286 -20 289 -20 346 76 89 149 670 1207 679 1237 21 69 5
           <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <a href="/web-tools.html#/ipsum" class="group bg-white rounded-lg p-4 shadow hover:shadow-lg transition-all duration-200 border border-gray-200 hover:border-indigo-300">
               <div class="flex items-center mb-2">
-                <svg class="w-6 h-6 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"></path>
+                <svg class="w-6 h-6 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                 </svg>
                 <h3 class="font-semibold text-gray-800 group-hover:text-indigo-600">Lorem Ipsum</h3>
               </div>
@@ -508,9 +490,9 @@ l1042 1043 243 -17 c286 -20 289 -20 346 76 89 149 670 1207 679 1237 21 69 5
             <a href="/web-tools.html#/jwt" class="group bg-white rounded-lg p-4 shadow hover:shadow-lg transition-all duration-200 border border-gray-200 hover:border-indigo-300">
               <div class="flex items-center mb-2">
                 <svg class="w-6 h-6 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1221.75 8.25z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                 </svg>
-                <h3 class="font-semibold text-gray-800 group-hover:text-indigo-600">JWT Token Tool</h3>
+                <h3 class="font-semibold text-gray-800 group-hover:text-indigo-600">JWT Token Tool <span class="text-xs bg-blue-100 text-blue-800 px-1 rounded">BETA</span></h3>
               </div>
               <p class="text-sm text-gray-600">Decode/generate JWT tokens</p>
             </a>
@@ -533,6 +515,16 @@ l1042 1043 243 -17 c286 -20 289 -20 346 76 89 149 670 1207 679 1237 21 69 5
                 <h3 class="font-semibold text-gray-800 group-hover:text-indigo-600">URL Encode/Decode</h3>
               </div>
               <p class="text-sm text-gray-600">Encode and decode URLs</p>
+            </a>
+            
+            <a href="/web-tools.html#/swagger-viewer" class="group bg-white rounded-lg p-4 shadow hover:shadow-lg transition-all duration-200 border border-gray-200 hover:border-indigo-300">
+              <div class="flex items-center mb-2">
+                <svg class="w-6 h-6 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0118 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path>
+                </svg>
+                <h3 class="font-semibold text-gray-800 group-hover:text-indigo-600">Swagger Viewer</h3>
+              </div>
+              <p class="text-sm text-gray-600">View OpenAPI/Swagger docs offline</p>
             </a>
           </div>
         </div>
@@ -564,7 +556,7 @@ l1042 1043 243 -17 c286 -20 289 -20 346 76 89 149 670 1207 679 1237 21 69 5
                 </svg>
                 <h3 class="font-semibold text-gray-800 group-hover:text-green-600">Quick Files</h3>
               </div>
-              <p class="text-sm text-gray-600">File operations</p>
+              <p class="text-sm text-gray-600">Create, edit, and download text files with syntax highlighting</p>
             </a>
             
             <a href="/web-tools.html#/text-to-ipsum" class="group bg-white rounded-lg p-4 shadow hover:shadow-lg transition-all duration-200 border border-gray-200 hover:border-green-300">
@@ -582,9 +574,19 @@ l1042 1043 243 -17 c286 -20 289 -20 346 76 89 149 670 1207 679 1237 21 69 5
                 <svg class="w-6 h-6 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"></path>
                 </svg>
-                <h3 class="font-semibold text-gray-800 group-hover:text-green-600">Minify</h3>
+                <h3 class="font-semibold text-gray-800 group-hover:text-green-600">Minify <span class="text-xs bg-gray-100 text-gray-800 px-1 rounded">SOON</span></h3>
               </div>
               <p class="text-sm text-gray-600">Minify code and text</p>
+            </a>
+            
+            <a href="/web-tools.html#/soon" class="group bg-white rounded-lg p-4 shadow hover:shadow-lg transition-all duration-200 border border-gray-200 hover:border-green-300">
+              <div class="flex items-center mb-2">
+                <svg class="w-6 h-6 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.5 7.5h-.75A2.25 2.25 0 004.5 9.75v7.5a2.25 2.25 0 002.25 2.25h7.5a2.25 2.25 0 002.25-2.25v-7.5a2.25 2.25 0 00-2.25-2.25h-.75m-6 3.75l3 3 6-6"></path>
+                </svg>
+                <h3 class="font-semibold text-gray-800 group-hover:text-green-600">Diff Checker <span class="text-xs bg-gray-100 text-gray-800 px-1 rounded">SOON</span></h3>
+              </div>
+              <p class="text-sm text-gray-600">Compare text differences</p>
             </a>
           </div>
         </div>
@@ -697,9 +699,30 @@ l1042 1043 243 -17 c286 -20 289 -20 346 76 89 149 670 1207 679 1237 21 69 5
                 <svg class="w-6 h-6 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"></path>
                 </svg>
-                <h3 class="font-semibold text-gray-800 group-hover:text-blue-600">Script Injection</h3>
+                <h3 class="font-semibold text-gray-800 group-hover:text-blue-600">Script Injection <span class="text-xs bg-blue-100 text-blue-800 px-1 rounded">BETA</span></h3>
               </div>
               <p class="text-sm text-gray-600">Inject JS and CSS code</p>
+            </a>
+            
+            <a href="/web-tools.html#/block-url" class="group bg-white rounded-lg p-4 shadow hover:shadow-lg transition-all duration-200 border border-gray-200 hover:border-blue-300">
+              <div class="flex items-center mb-2">
+                <svg class="w-6 h-6 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
+                </svg>
+                <h3 class="font-semibold text-gray-800 group-hover:text-blue-600">Block URLs <span class="text-xs bg-blue-100 text-blue-800 px-1 rounded">BETA</span></h3>
+              </div>
+              <p class="text-sm text-gray-600">Block website access</p>
+            </a>
+            
+            <a href="/web-tools.html#/whatsapp-blur" class="group bg-white rounded-lg p-4 shadow hover:shadow-lg transition-all duration-200 border border-gray-200 hover:border-blue-300">
+              <div class="flex items-center mb-2">
+                <svg class="w-6 h-6 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <h3 class="font-semibold text-gray-800 group-hover:text-blue-600">WhatsApp Blur <span class="text-xs bg-green-100 text-green-800 px-1 rounded">NEW</span></h3>
+              </div>
+              <p class="text-sm text-gray-600">Privacy blur for WhatsApp Web</p>
             </a>
             
             <a href="/web-tools.html#/settings" class="group bg-white rounded-lg p-4 shadow hover:shadow-lg transition-all duration-200 border border-gray-200 hover:border-blue-300">

@@ -7,6 +7,10 @@
 export { useColorsStore, usePaletteStore } from './colors';
 export type * from './colors/types';
 
+// File Store
+export { useFileStore } from './files';
+export type * from './files/types';
+
 // Main Store (global app state)
 export { useMainStore } from './mainStore';
 

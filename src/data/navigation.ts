@@ -53,12 +53,6 @@ export const navigationSections: NavigationSection[] = [
     icon: Zap,
     items: [
       {
-        label: 'Lorem Ipsum',
-        path: '/ipsum',
-        description: 'Generate placeholder text',
-        icon: Type
-      },
-      {
         label: 'Password',
         path: '/password',
         description: 'Generate secure passwords',
@@ -115,23 +109,16 @@ export const navigationSections: NavigationSection[] = [
     icon: FileText,
     items: [
       {
-        label: 'Text Info',
-        path: '/text-info',
-        description: 'Analyze text properties',
-        icon: Info
+        label: 'Text Tools',
+        path: '/text-tools',
+        description: 'Analyze text, generate lorem ipsum, and convert content',
+        icon: Type
       },
       {
         label: 'Quick Files',
         path: '/quick-files',
-        description: 'File operations',
-        icon: Files,
-        status: 'soon',
-      },
-      {
-        label: 'Text to Ipsum',
-        path: '/text-to-ipsum',
-        description: 'Convert text to Lorem Ipsum',
-        icon: Type
+        description: 'Create, edit, and download text files with syntax highlighting',
+        icon: Files
       },
       {
         label: 'Minify',

@@ -53,6 +53,11 @@ export default defineComponent({
       isValidJWT: false,
       decodeError: '',
       
+      // Signature validation
+      validationSecretKey: '',
+      isSignatureValid: null as boolean | null,
+      validationError: '',
+      
       // Generator
       headerAlgorithm: 'HS256',
       headerType: 'JWT',
@@ -104,6 +109,9 @@ export default defineComponent({
     },
     secretKey() {
       this.generateJWT();
+    },
+    validationSecretKey() {
+      this.validateSignature();
     }
   },
   methods: {
@@ -151,6 +159,8 @@ export default defineComponent({
       this.signature = '';
       this.isValidJWT = false;
       this.decodeError = '';
+      this.isSignatureValid = null;
+      this.validationError = '';
     },
     
     // JWT Generation
@@ -225,6 +235,7 @@ export default defineComponent({
     
     clearAll() {
       this.jwtToken = '';
+      this.validationSecretKey = '';
       this.resetDecodeState();
     },
     
@@ -248,6 +259,33 @@ export default defineComponent({
         return { status: 'Expiring Soon', color: 'text-yellow-500' };
       } else {
         return { status: 'Valid', color: 'text-green-500' };
+      }
+    },
+    
+    // Signature validation
+    validateSignature() {
+      this.isSignatureValid = null;
+      this.validationError = '';
+      
+      if (!this.isValidJWT || !this.validationSecretKey.trim()) {
+        this.validationError = 'Please provide a valid JWT and secret key';
+        return;
+      }
+      
+      try {
+        const parts = this.jwtToken.split('.');
+        const data = `${parts[0]}.${parts[1]}`;
+        const expectedSignature = this.createSignature(data, this.validationSecretKey);
+        
+        this.isSignatureValid = expectedSignature === parts[2];
+        
+        if (!this.isSignatureValid) {
+          this.validationError = 'Signature validation failed - secret key may be incorrect';
+        }
+        
+      } catch (error) {
+        this.validationError = 'Error validating signature';
+        this.isSignatureValid = false;
       }
     }
   },
@@ -317,11 +355,11 @@ export default defineComponent({
               <div v-if="jwtToken" class="text-xs font-mono break-all space-y-1">
                 <div class="text-muted-foreground">Token Parts:</div>
                 <div>
-                  <span class="bg-red-100 dark:bg-red-900 px-1 rounded">{{ tokenParts.header }}</span>
+                  <span class="bg-red-200 dark:bg-red-900 px-1 rounded">{{ tokenParts.header }}</span>
                   <span class="text-muted-foreground">.</span>
-                  <span class="bg-purple-100 dark:bg-purple-900 px-1 rounded">{{ tokenParts.payload }}</span>
+                  <span class="bg-purple-200 dark:bg-purple-900 px-1 rounded">{{ tokenParts.payload }}</span>
                   <span class="text-muted-foreground">.</span>
-                  <span class="bg-cyan-100 dark:bg-cyan-900 px-1 rounded">{{ tokenParts.signature }}</span>
+                  <span class="bg-cyan-200 dark:bg-cyan-900 px-1 rounded">{{ tokenParts.signature }}</span>
                 </div>
               </div>
             </div>
@@ -339,7 +377,7 @@ export default defineComponent({
                 <Textarea
                   v-model="decodedHeader"
                   readonly
-                  class="min-h-[150px] bg-red-50 dark:bg-red-950 font-mono text-sm"
+                  class="min-h-[150px] bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800 text-red-900 dark:text-red-100 font-mono text-sm"
                 />
                 <CopyButton :value="decodedHeader" label="Copy Header" class="text-sm" />
               </div>
@@ -350,7 +388,7 @@ export default defineComponent({
                 <Textarea
                   v-model="decodedPayload"
                   readonly
-                  class="min-h-[150px] bg-purple-50 dark:bg-purple-950 font-mono text-sm"
+                  class="min-h-[150px] bg-purple-50 dark:bg-purple-950 border-purple-200 dark:border-purple-800 text-purple-900 dark:text-purple-100 font-mono text-sm"
                 />
                 <CopyButton :value="decodedPayload" label="Copy Payload" class="text-sm" />
               </div>
@@ -391,13 +429,58 @@ export default defineComponent({
             </div>
 
             <!-- Signature -->
-            <div v-if="signature" class="space-y-2">
+            <div v-if="signature" class="space-y-4">
               <Label class="text-cyan-600 dark:text-cyan-400">Signature</Label>
-              <div class="bg-cyan-50 dark:bg-cyan-950 p-3 rounded font-mono text-sm break-all">
+              <div class="bg-cyan-50 dark:bg-cyan-950 border border-cyan-200 dark:border-cyan-800 text-cyan-900 dark:text-cyan-100 p-3 rounded font-mono text-sm break-all">
                 {{ signature }}
               </div>
+              
+              <!-- Signature Validation -->
+              <div class="space-y-3 border-t pt-4">
+                <Label class="text-sm font-medium">Validate Signature</Label>
+                <div class="space-y-3">
+                  <div class="flex gap-2">
+                    <Input
+                      v-model="validationSecretKey"
+                      type="password"
+                      placeholder="Enter secret key to validate..."
+                      class="flex-1 font-mono text-sm"
+                    />
+                    <Button 
+                      @click="validateSignature" 
+                      variant="outline" 
+                      size="sm"
+                      :disabled="!isValidJWT || !validationSecretKey.trim()"
+                    >
+                      Validate
+                    </Button>
+                  </div>
+                  
+                  <!-- Validation Result -->
+                  <div v-if="isSignatureValid !== null" class="flex items-center gap-2 text-sm">
+                    <div v-if="isSignatureValid" class="flex items-center gap-1 text-green-600 dark:text-green-400">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                      </svg>
+                      Signature Valid
+                    </div>
+                    <div v-else class="flex items-center gap-1 text-red-600 dark:text-red-400">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                      </svg>
+                      Signature Invalid
+                    </div>
+                  </div>
+                  
+                  <!-- Validation Error -->
+                  <Alert v-if="validationError" variant="destructive" class="text-sm">
+                    <AlertDescription>{{ validationError }}</AlertDescription>
+                  </Alert>
+                </div>
+              </div>
+              
               <p class="text-xs text-muted-foreground">
-                Signature verification requires the secret key and proper cryptographic implementation.
+                This uses a simplified signature algorithm for demonstration. Use proper HMAC-SHA256 in production.
               </p>
             </div>
           </TabsContent>
@@ -409,7 +492,7 @@ export default defineComponent({
               <Label class="text-base font-medium text-red-600 dark:text-red-400">Header</Label>
               <Textarea
                 v-model="customHeader"
-                class="min-h-[100px] bg-red-50 dark:bg-red-950 font-mono text-sm"
+                class="min-h-[100px] bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800 text-red-900 dark:text-red-100 font-mono text-sm"
               />
             </div>
 
@@ -435,7 +518,7 @@ export default defineComponent({
               </div>
               <Textarea
                 v-model="payloadData"
-                class="min-h-[200px] bg-purple-50 dark:bg-purple-950 font-mono text-sm"
+                class="min-h-[200px] bg-purple-50 dark:bg-purple-950 border-purple-200 dark:border-purple-800 text-purple-900 dark:text-purple-100 font-mono text-sm"
               />
             </div>
 
@@ -446,7 +529,7 @@ export default defineComponent({
                 v-model="secretKey"
                 type="password"
                 placeholder="Enter your secret key..."
-                class="bg-cyan-50 dark:bg-cyan-950 font-mono text-sm"
+                class="bg-cyan-50 dark:bg-cyan-950 border-cyan-200 dark:border-cyan-800 text-cyan-900 dark:text-cyan-100 font-mono text-sm placeholder:text-cyan-600 dark:placeholder:text-cyan-400"
               />
               <p class="text-xs text-muted-foreground">
                 This uses a simplified signature algorithm for demonstration. Use proper HMAC-SHA256 in production.
