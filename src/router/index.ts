@@ -155,6 +155,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/whatsapp-blur',
     name: 'whatsapp-blur',
     component: () => import('../views/WhatsAppBlur.vue')
+  },
+  {
+    path: '/markdown-notes',
+    name: 'markdown-notes',
+    component: () => import('../views/MarkDownNotes.vue')
   }
 ];
 

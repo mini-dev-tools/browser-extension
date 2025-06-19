@@ -83,7 +83,7 @@ const onTextEdit = () => {
 
 const convertGeneratedTextToIpsum = () => {
   const wordsCount = TextUtils.countWords(generatedText.value);
-  
+
   if (wordsCount > 0) {
     generatedText.value = TextUtils.convertTextToLoremIpsum(generatedText.value);
     isManuallyEdited.value = false;
@@ -128,12 +128,12 @@ onMounted(() => {
           <div class="lg:col-span-1">
             <Card>
               <CardContent class="p-0">
-                <Tabs :model-value="leftSidebarTab" @update:model-value="(val) => leftSidebarTab = val" class="w-full">
+                <Tabs :model-value="leftSidebarTab" @update:model-value="(val: string | number) => leftSidebarTab = String(val)" class="w-full">
                   <TabsList class="grid w-full grid-cols-2">
                     <TabsTrigger value="generator">Generator</TabsTrigger>
                     <TabsTrigger value="analytics">Analytics</TabsTrigger>
                   </TabsList>
-                  
+
                   <!-- Generator Tab -->
                   <TabsContent value="generator" class="p-6 space-y-6">
                     <div class="space-y-1">
@@ -142,12 +142,12 @@ onMounted(() => {
                         Generate placeholder text for your designs and mockups
                       </p>
                     </div>
-                    
+
                     <!-- Generation Controls -->
                     <div class="space-y-4">
                       <div class="space-y-2">
                         <Label>Count</Label>
-                        <Select :model-value="number.toString()" @update:model-value="(val) => { number = parseInt(val) || 2; generateIpsum(); }">
+                        <Select :model-value="number.toString()" @update:model-value="(val: any) => { number = parseInt(String(val || '2')) || 2; generateIpsum(); }">
                           <SelectTrigger>
                             <SelectValue :placeholder="number.toString()" />
                           </SelectTrigger>
@@ -162,7 +162,7 @@ onMounted(() => {
                           </SelectContent>
                         </Select>
                       </div>
-                      
+
                       <div class="space-y-2">
                         <Label>Type</Label>
                         <Select :model-value="type" @update:model-value="(val) => { type = val as any; generateIpsum(); }">
@@ -176,13 +176,13 @@ onMounted(() => {
                           </SelectContent>
                         </Select>
                       </div>
-                      
+
                       <Button @click="generateIpsum" variant="outline" class="w-full">
                         <RefreshCw class="mr-2 h-4 w-4" />
                         Generate
                       </Button>
                     </div>
-                    
+
                     <!-- Advanced Settings -->
                     <div>
                       <Collapsible v-model:open="showSettings">
@@ -193,13 +193,13 @@ onMounted(() => {
                               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                             </svg>
                             Advanced Settings
-                            <svg 
-                              width="16" 
-                              height="16" 
-                              viewBox="0 0 24 24" 
-                              fill="none" 
-                              stroke="currentColor" 
-                              stroke-width="2" 
+                            <svg
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
                               :class="showSettings ? 'rotate-180' : ''"
                               class="transition-transform"
                             >
@@ -223,7 +223,7 @@ onMounted(() => {
                                 class="w-full"
                               />
                             </div>
-                            
+
                             <div class="space-y-3">
                               <Label class="text-sm font-medium">
                                 Words per sentence: {{ wordsRange[0] }} - {{ wordsRange[1] }}
@@ -243,7 +243,7 @@ onMounted(() => {
                       </Collapsible>
                     </div>
                   </TabsContent>
-                  
+
                   <!-- Analytics Tab -->
                   <TabsContent value="analytics" class="p-6 space-y-6">
                     <div class="space-y-1">
@@ -252,7 +252,7 @@ onMounted(() => {
                         Character composition and statistics
                       </p>
                     </div>
-                    
+
                     <!-- Quick Stats -->
                     <div class="grid grid-cols-2 gap-4">
                       <div class="text-center p-3 bg-muted rounded-lg">
@@ -264,7 +264,7 @@ onMounted(() => {
                         <div class="text-sm text-muted-foreground">Characters</div>
                       </div>
                     </div>
-                    
+
                     <!-- Character Composition -->
                     <div class="space-y-3">
                       <h4 class="font-medium">Character Composition</h4>
@@ -306,25 +306,25 @@ onMounted(() => {
                 <div class="flex items-center gap-4 text-sm text-muted-foreground">
                   <span>{{ generatedTextStats.words }} words</span>
                   <span>{{ generatedTextStats.characters }} chars</span>
-                  <Button 
-                    @click="toggleGeneratedComposition" 
-                    variant="ghost" 
+                  <Button
+                    @click="toggleGeneratedComposition"
+                    variant="ghost"
                     size="sm"
                     class="h-auto p-0 text-sm font-normal text-muted-foreground hover:text-foreground"
                   >
                     More
-                    <ChevronDown 
-                      class="ml-1 h-3 w-3 transition-transform" 
+                    <ChevronDown
+                      class="ml-1 h-3 w-3 transition-transform"
                       :class="showGeneratedComposition ? 'rotate-180' : ''"
                     />
                   </Button>
                 </div>
               </div>
               <div class="flex gap-2">
-                <Button 
-                  v-if="isManuallyEdited" 
-                  @click="convertGeneratedTextToIpsum" 
-                  variant="default" 
+                <Button
+                  v-if="isManuallyEdited"
+                  @click="convertGeneratedTextToIpsum"
+                  variant="default"
                   size="sm"
                 >
                   <RefreshCw class="mr-2 h-4 w-4" />
@@ -350,7 +350,7 @@ onMounted(() => {
                 </Button>
               </AlertDescription>
             </Alert>
-            
+
             <Textarea
               v-model="generatedText"
               class="min-h-[500px] w-full font-mono text-sm"

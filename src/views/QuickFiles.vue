@@ -73,6 +73,7 @@ const isEditing = ref(false);
 const deleteFileId = ref<string | null>(null);
 const searchTerm = ref('');
 const fileInput = ref<HTMLInputElement | null>(null);
+const editingContent = ref('');
 
 const filteredFiles = computed(() => {
   if (!searchTerm.value) return fileStore.files;
@@ -132,17 +133,27 @@ const createNewFile = () => {
   console.log('Store currentFileId:', fileStore.currentFileId);
   console.log('Store getCurrentFile:', fileStore.getCurrentFile);
   console.log('All files:', fileStore.files);
+  editingContent.value = newFile.content || '';
   isEditing.value = true;
   showDialog.value = true;
 };
 
 const selectFile = (file: any) => {
   fileStore.selectFile(file.id);
+  // Update editing content when selecting a file
+  if (file && file.content) {
+    editingContent.value = file.content;
+  }
 };
 
 const saveFile = () => {
   isEditing.value = false;
   showDialog.value = false;
+};
+
+const closeDialog = () => {
+  showDialog.value = false;
+  isEditing.value = false;
 };
 
 const deleteFile = (fileId: string) => {
@@ -168,9 +179,13 @@ const formatDate = (dateString: string) => {
   });
 };
 
-const updateFileContent = (content: string) => {
+const updateFileContent = (content: any) => {
+  // Update the local editing content
+  editingContent.value = typeof content === 'string' ? content : '';
+  
+  // Also update the store
   if (currentFile.value) {
-    fileStore.updateFileContent(currentFile.value.id, content);
+    fileStore.updateFileContent(currentFile.value.id, editingContent.value);
   }
 };
 
@@ -181,9 +196,13 @@ const updateFileName = (name: string) => {
 };
 
 const getFileStats = (file: any) => {
-  const lines = file.content.split('\n').length;
-  const chars = file.content.length;
-  const size = new Blob([file.content]).size;
+  // Ensure content is a string, default to empty string if not
+  const content = file?.content || '';
+  const contentStr = typeof content === 'string' ? content : String(content);
+  
+  const lines = contentStr ? contentStr.split('\n').length : 0;
+  const chars = contentStr.length;
+  const size = new Blob([contentStr]).size;
   return { lines, chars, size };
 };
 
@@ -265,7 +284,7 @@ const formatFileSize = (bytes: number) => {
                     <Button
                       size="sm"
                       variant="ghost"
-                      @click.stop="selectFile(file); isEditing = true; showDialog = true"
+                      @click.stop="selectFile(file); editingContent = file.content || ''; isEditing = true; showDialog = true"
                       class="h-6 w-6 p-0"
                     >
                       <Edit class="w-3 h-3" />
@@ -358,7 +377,7 @@ const formatFileSize = (bytes: number) => {
                       </SelectItem>
                     </SelectContent>
                   </Select>
-                  <Button @click="isEditing = true; showDialog = true" size="sm" class="h-8 px-3 text-xs">
+                  <Button @click="editingContent = currentFile.content || ''; isEditing = true; showDialog = true" size="sm" class="h-8 px-3 text-xs">
                     <Edit class="w-3 h-3 mr-1" />
                     Edit
                   </Button>
@@ -378,10 +397,6 @@ const formatFileSize = (bytes: number) => {
               </div>
             </CardHeader>
             <CardContent class="h-full overflow-hidden p-2">
-              <!-- Debug content info for preview -->
-              <div class="text-xs mb-2 p-2 bg-blue-100 rounded">
-                Preview Content: {{ (currentFile.content || '').length }} chars
-              </div>
               <!-- Markdown Preview -->
               <div v-if="currentFile.fileType.editorType === 'markdown'" class="h-full w-full">
                 <MdEditor
@@ -397,7 +412,7 @@ const formatFileSize = (bytes: number) => {
               <!-- Ace Editor for other file types -->
               <div v-else class="h-full w-full">
                 <v-ace-editor
-                  :model-value="currentFile.content || ''"
+                  :value="currentFile.content || ''"
                   :lang="currentFile.fileType.aceName"
                   :theme="theme"
                   :readonly="true"
@@ -425,14 +440,14 @@ const formatFileSize = (bytes: number) => {
       </div>
 
       <!-- Edit Dialog -->
-      <Dialog v-model:open="showDialog">
+      <Dialog v-model:open="showDialog" @update:open="(open) => { if (!open) closeDialog() }">
         <DialogContent class="max-w-[95vw] max-h-[90vh] w-full flex flex-col">
           <DialogHeader>
             <DialogTitle>
               <Input
                 v-if="currentFile"
                 :model-value="currentFile.name"
-                @update:model-value="updateFileName"
+@update:model-value="(val: string | number) => updateFileName(String(val))"
                 class="text-lg font-semibold border-none p-0 h-auto"
                 placeholder="File name..."
               />
@@ -443,28 +458,22 @@ const formatFileSize = (bytes: number) => {
             <div class="text-xs text-muted-foreground mb-2 p-2 border rounded">
               {{ currentFile?.fileType?.label }} • {{ currentFile?.extension }}
             </div>
-            <!-- Debug content info -->
-            <div class="text-xs mb-2 p-2 bg-yellow-100 rounded">
-              Content length: {{ currentFile.content?.length || 0 }} chars<br>
-              Content preview: {{ (currentFile.content || '').substring(0, 100) }}...
-            </div>
             <!-- Markdown Editor -->
             <div v-if="currentFile.fileType.editorType === 'markdown'" class="h-[400px]">
               <MdEditor
-                :model-value="currentFile.content || ''"
-                @update:model-value="updateFileContent"
+                v-model="editingContent"
                 :height="400"
                 preview-theme="github"
                 :theme="mainStore.isDark ? 'dark' : 'light'"
                 language="en-US"
                 class="w-full h-full"
+                @update:model-value="updateFileContent"
               />
             </div>
             <!-- Ace Editor -->
             <div v-else class="h-[400px]">
               <v-ace-editor
-                :model-value="currentFile.content || ''"
-                @update:model-value="updateFileContent"
+                v-model:value="editingContent"
                 :lang="currentFile.fileType.aceName"
                 :theme="theme"
                 :showPrintMargin="false"
@@ -477,6 +486,7 @@ const formatFileSize = (bytes: number) => {
                 :useSoftTabs="true"
                 class="h-full w-full rounded-md"
                 placeholder="Start typing..."
+                @input="updateFileContent"
               />
             </div>
           </div>
@@ -487,7 +497,7 @@ const formatFileSize = (bytes: number) => {
             </div>
           </div>
           <div class="flex justify-end gap-2 pt-4 border-t">
-            <Button variant="outline" @click="showDialog = false">Close</Button>
+            <Button variant="outline" @click="closeDialog">Close</Button>
             <Button @click="saveFile">Save</Button>
           </div>
         </DialogContent>

@@ -159,11 +159,13 @@ export const createActions = (state: FileState): FileActions => ({
     if (!query.trim()) return state.files;
     
     const lowercaseQuery = query.toLowerCase();
-    return state.files.filter(file =>
-      file.name.toLowerCase().includes(lowercaseQuery) ||
-      file.content.toLowerCase().includes(lowercaseQuery) ||
-      file.fileType.label.toLowerCase().includes(lowercaseQuery)
-    );
+    return state.files.filter(file => {
+      const content = file.content || '';
+      const contentStr = typeof content === 'string' ? content : String(content);
+      return file.name.toLowerCase().includes(lowercaseQuery) ||
+        contentStr.toLowerCase().includes(lowercaseQuery) ||
+        file.fileType.label.toLowerCase().includes(lowercaseQuery);
+    });
   },
 
   getFilesByType: (extension: string): FileContent[] => {

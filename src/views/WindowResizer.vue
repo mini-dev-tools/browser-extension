@@ -2,6 +2,7 @@
 import { defineComponent } from 'vue';
 import { Input } from '@/components/ui/input';
 import ExtensionRequired from '@/components/ExtensionRequired.vue';
+import { Smartphone, Tablet, Laptop, Monitor, Tv } from 'lucide-vue-next';
 
 declare const chrome: any;
 
@@ -9,7 +10,12 @@ export default defineComponent({
   name: 'WindowResizer',
   components: {
     Input,
-    ExtensionRequired
+    ExtensionRequired,
+    Smartphone,
+    Tablet,
+    Laptop,
+    Monitor,
+    Tv
   },
   // type inference enabled
   data() {
@@ -23,7 +29,7 @@ export default defineComponent({
           resizeTarget: 'window',
           width: 320,
           height: 568,
-          icon: '📱',
+          icon: 'Smartphone',
           description: 'Iphone 5',
           position: {
             options: 'unchanged', /// Options: unchanged + center + custom
@@ -35,7 +41,7 @@ export default defineComponent({
           resizeTarget: 'window',
           width: 375,
           height: 667,
-          icon: 'fa fa-mobile',
+          icon: 'Smartphone',
           description: 'Iphone 6',
           position: {
             options: 'unchanged', /// Options: unchanged + center + custom
@@ -47,7 +53,7 @@ export default defineComponent({
           resizeTarget: 'window',
           width: 1024,
           height: 768,
-          icon: '📟',
+          icon: 'Tablet',
           description: 'Ipad',
           position: {
             options: 'unchanged', /// Options: unchanged + center + custom
@@ -59,7 +65,7 @@ export default defineComponent({
           resizeTarget: 'window',
           width: 1440,
           height: 900,
-          icon: '💻',
+          icon: 'Laptop',
           description: 'Laptop',
           position: {
             options: 'unchanged', /// Options: unchanged + center + custom
@@ -71,7 +77,7 @@ export default defineComponent({
           resizeTarget: 'window',
           width: 1680,
           height: 1050,
-          icon: '🖥️',
+          icon: 'Monitor',
           description: 'Desktop small',
           position: {
             options: 'unchanged', /// Options: unchanged + center + custom
@@ -84,7 +90,7 @@ export default defineComponent({
           resizeTarget: 'window',
           width: 1920,
           height: 1080,
-          icon: '📺',
+          icon: 'Monitor',
           description: 'Desktop 2',
           position: {
             options: 'unchanged', /// Options: unchanged + center + custom
@@ -96,7 +102,7 @@ export default defineComponent({
           resizeTarget: 'window',
           width: 2560,
           height: 1440,
-          icon: 'fa fa-tv',
+          icon: 'Tv',
           description: 'Desktop 3',
           position: {
             options: 'unchanged', /// Options: unchanged + center + custom
@@ -215,8 +221,11 @@ export default defineComponent({
       >
         <div class="flex items-center gap-2">
           <!-- Compact Device Icon -->
-          <div class="w-6 h-6 bg-primary/10 rounded flex items-center justify-center group-hover:bg-primary/15 transition-colors duration-200 flex-shrink-0">
-            <span class="text-sm group-hover:scale-110 transition-transform duration-200">{{ preset.icon }}</span>
+          <div class="w-6 h-6 bg-primary/20 rounded flex items-center justify-center group-hover:bg-primary/30 transition-colors duration-200 flex-shrink-0">
+            <component 
+              :is="preset.icon" 
+              class="w-4 h-4 text-primary/80 group-hover:text-primary group-hover:scale-110 transition-all duration-200"
+            />
           </div>
           
           <!-- Compact Device Info -->

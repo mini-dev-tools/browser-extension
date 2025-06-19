@@ -188,6 +188,16 @@ const checkRecordingState = async () => {
 // EyeDropper functionality
 const isEyeDropperActive = ref(false);
 const isFullscreen = ref(false);
+const originalPopupSize = ref({ 
+  width: '', 
+  height: '', 
+  minWidth: '', 
+  minHeight: '', 
+  maxWidth: '', 
+  maxHeight: '', 
+  overflow: '',
+  appDisplay: ''
+});
 
 const startEyeDropper = async () => {
   console.log('CompactNavbar: startEyeDropper called');
@@ -210,37 +220,141 @@ const startEyeDropper = async () => {
     return;
   }
 
-  // Resize popup to maximum size if in Chrome extension
-  if (isChromeExtension()) {
+  // Check if extension is in popup mode (small window) vs fullscreen/options page
+  const isPopupMode = isChromeExtension() && window.innerWidth < 800;
+  
+  // Shrink popup to minimal size if in Chrome extension popup mode
+  if (isPopupMode) {
     try {
-      // Set popup size to maximum allowed dimensions
-      document.body.style.width = '800px';
-      document.body.style.height = '600px';
-      document.body.style.minWidth = '800px';
-      document.body.style.minHeight = '600px';
+      // Store original dimensions
+      const appElement = document.getElementById('app');
+      originalPopupSize.value = {
+        width: document.body.style.width || '',
+        height: document.body.style.height || '',
+        minWidth: document.body.style.minWidth || '',
+        minHeight: document.body.style.minHeight || '',
+        maxWidth: document.body.style.maxWidth || '',
+        maxHeight: document.body.style.maxHeight || '',
+        overflow: document.body.style.overflow || '',
+        appDisplay: appElement?.style.display || ''
+      };
+
+      // Set popup size to minimal dimensions for eye dropper
+      document.body.style.width = '50px';
+      document.body.style.height = '50px';
+      document.body.style.minWidth = '50px';
+      document.body.style.minHeight = '50px';
+      document.body.style.maxWidth = '50px';
+      document.body.style.maxHeight = '50px';
+      document.body.style.overflow = 'hidden';
       
       // Also resize the root element
       const rootElement = document.documentElement;
-      rootElement.style.width = '800px';
-      rootElement.style.height = '600px';
+      rootElement.style.width = '50px';
+      rootElement.style.height = '50px';
+      rootElement.style.minWidth = '50px';
+      rootElement.style.minHeight = '50px';
+      rootElement.style.maxWidth = '50px';
+      rootElement.style.maxHeight = '50px';
+      rootElement.style.overflow = 'hidden';
       
-      console.log('CompactNavbar: Popup resized for color picker');
+      // Hide the main app content to minimize visual interference
+      if (appElement) {
+        appElement.style.display = 'none';
+      }
+      
+      console.log('CompactNavbar: Popup shrunk for eye dropper');
     } catch (error) {
       console.warn('CompactNavbar: Could not resize popup:', error);
     }
   }
+  
+  // Create a color preview overlay (for both popup and fullscreen modes)
+  const colorPreview = document.createElement('div');
+  colorPreview.id = 'eye-dropper-preview';
+  colorPreview.style.cssText = `
+    position: fixed;
+    top: ${isPopupMode ? '0' : '20px'};
+    left: ${isPopupMode ? '0' : '20px'};
+    width: 50px;
+    height: 50px;
+    border: 2px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(0,0,0,0.5);
+    z-index: 999999;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    transition: background-color 0.1s ease;
+  `;
+  
+  // Add a smaller inner circle for better color visibility
+  const innerCircle = document.createElement('div');
+  innerCircle.style.cssText = `
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.2);
+    background: #ffffff;
+    transition: background-color 0.1s ease;
+  `;
+  colorPreview.appendChild(innerCircle);
+  document.body.appendChild(colorPreview);
 
   try {
     console.log('CompactNavbar: Starting EyeDropper...');
     isEyeDropperActive.value = true;
+    
+    // Get the color preview elements
+    const colorPreview = document.getElementById('eye-dropper-preview');
+    const innerCircle = colorPreview?.querySelector('div') as HTMLElement;
+    
     const eyeDropper = new (window as any).EyeDropper();
     console.log('CompactNavbar: EyeDropper instance created:', eyeDropper);
+    
+    // Add a pulsing animation while waiting for selection
+    if (colorPreview && innerCircle) {
+      colorPreview.style.animation = 'pulse 1s infinite';
+      innerCircle.style.background = 'linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57)';
+      innerCircle.style.backgroundSize = '200% 200%';
+      innerCircle.style.animation = 'gradient-shift 2s infinite';
+      
+      // Add CSS keyframes for animations
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+        }
+        @keyframes gradient-shift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+      `;
+      document.head.appendChild(style);
+    }
     
     const result = await eyeDropper.open();
     
     console.log('CompactNavbar: EyeDropper result:', result);
     
     if (result && result.sRGBHex) {
+      // Show the picked color in the preview
+      if (innerCircle) {
+        innerCircle.style.animation = 'none';
+        innerCircle.style.background = result.sRGBHex;
+        colorPreview!.style.animation = 'none';
+        
+        // Brief flash effect to show selection
+        colorPreview!.style.transform = 'scale(1.2)';
+        setTimeout(() => {
+          if (colorPreview) colorPreview.style.transform = 'scale(1)';
+        }, 200);
+      }
+      
       console.log('CompactNavbar: Adding color to history:', result.sRGBHex);
       // Add color to history with eye_drop source
       try {
@@ -250,8 +364,13 @@ const startEyeDropper = async () => {
         // Set the picked color as the selected color in the color picker
         localStorage.setItem('picker-selected-color', result.sRGBHex);
         
-        // Navigate to color picker to show the picked color
-        router.push('/color-picker');
+        // Wait a moment to show the color before navigating
+        setTimeout(() => {
+          // Restore original popup size before navigating
+          restorePopupSize();
+          // Navigate to color picker to show the picked color
+          router.push('/color-picker');
+        }, 800);
       } catch (storeError) {
         console.error('CompactNavbar: Error adding color to history:', storeError);
       }
@@ -268,6 +387,70 @@ const startEyeDropper = async () => {
   } finally {
     console.log('CompactNavbar: EyeDropper operation finished');
     isEyeDropperActive.value = false;
+    // Restore popup size if it was shrunk (with delay if color was picked)
+    const isPopupMode = isChromeExtension() && window.innerWidth < 800;
+    if (isPopupMode) {
+      const wasColorPicked = document.getElementById('eye-dropper-preview')?.querySelector('div')?.style.background.includes('#');
+      if (!wasColorPicked) {
+        restorePopupSize();
+      }
+    } else {
+      // For fullscreen mode, just remove the preview overlay
+      const colorPreview = document.getElementById('eye-dropper-preview');
+      if (colorPreview) {
+        colorPreview.remove();
+      }
+    }
+  }
+};
+
+const restorePopupSize = () => {
+  const isPopupMode = isChromeExtension() && window.innerWidth < 800;
+  if (isPopupMode) {
+    try {
+      // Restore original dimensions
+      document.body.style.width = originalPopupSize.value.width;
+      document.body.style.height = originalPopupSize.value.height;
+      document.body.style.minWidth = originalPopupSize.value.minWidth;
+      document.body.style.minHeight = originalPopupSize.value.minHeight;
+      document.body.style.maxWidth = originalPopupSize.value.maxWidth;
+      document.body.style.maxHeight = originalPopupSize.value.maxHeight;
+      document.body.style.overflow = originalPopupSize.value.overflow;
+      
+      // Also restore the root element
+      const rootElement = document.documentElement;
+      rootElement.style.width = originalPopupSize.value.width;
+      rootElement.style.height = originalPopupSize.value.height;
+      rootElement.style.minWidth = originalPopupSize.value.minWidth;
+      rootElement.style.minHeight = originalPopupSize.value.minHeight;
+      rootElement.style.maxWidth = originalPopupSize.value.maxWidth;
+      rootElement.style.maxHeight = originalPopupSize.value.maxHeight;
+      rootElement.style.overflow = originalPopupSize.value.overflow;
+      
+      // Restore the app element visibility
+      const appElement = document.getElementById('app');
+      if (appElement) {
+        appElement.style.display = originalPopupSize.value.appDisplay;
+      }
+      
+      // Remove the color preview overlay
+      const colorPreview = document.getElementById('eye-dropper-preview');
+      if (colorPreview) {
+        colorPreview.remove();
+      }
+      
+      // Remove any added styles
+      const addedStyles = document.querySelectorAll('style');
+      addedStyles.forEach(style => {
+        if (style.textContent?.includes('pulse') || style.textContent?.includes('gradient-shift')) {
+          style.remove();
+        }
+      });
+      
+      console.log('CompactNavbar: Popup size restored');
+    } catch (error) {
+      console.warn('CompactNavbar: Could not restore popup size:', error);
+    }
   }
 };
 
@@ -717,17 +900,7 @@ const closeMobileMenu = () => {
                       <div class="font-medium">EyeDropper Tool</div>
                       <div class="text-xs text-muted-foreground">Pick color from screen (Alt+P)</div>
                     </button>
-                    <button
-                      @click="toggleFullscreen(); closeMobileMenu();"
-                      class="w-full text-left block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
-                    >
-                      <div class="font-medium">
-                        {{ isChromeExtension() ? 'Open in New Tab' : (isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen') }}
-                      </div>
-                      <div class="text-xs text-muted-foreground">
-                        {{ isChromeExtension() ? 'Open tools in a full browser tab' : 'Toggle fullscreen mode (F11)' }}
-                      </div>
-                    </button>
+
                     <router-link
                       v-if="isChromeExtension()"
                       to="/window-resizer"
@@ -746,6 +919,17 @@ const closeMobileMenu = () => {
                       <div class="font-medium">Screenshot</div>
                       <div class="text-xs text-muted-foreground">Capture full page screenshot</div>
                     </router-link>
+                    <button
+                      @click="toggleFullscreen(); closeMobileMenu();"
+                      class="w-full text-left block rounded-md px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                    >
+                      <div class="font-medium">
+                        {{ isChromeExtension() ? 'Open in New Tab' : (isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen') }}
+                      </div>
+                      <div class="text-xs text-muted-foreground">
+                        {{ isChromeExtension() ? 'Open tools in a full browser tab' : 'Toggle fullscreen mode (F11)' }}
+                      </div>
+                    </button>
                   </div>
                 </div>
               </div>

@@ -269,18 +269,11 @@ export const showHistoryToast = (
   context?: string, 
   isUpdate: boolean = false
 ): void => {
-  const displaySource = sourceName || COLOR_SOURCE_DISPLAY_NAMES[source || 'picker'] || 'Unknown';
-  const action = isUpdate ? 'Updated in' : 'Added to';
+  const displaySource = sourceName || COLOR_SOURCE_DISPLAY_NAMES[source || 'picker'] || 'Picker';
   
-  let title = `${action} history`;
-  let description = hex.toUpperCase();
-  
-  if (context) {
-    title += ` from ${displaySource}`;
-    description += ` • ${context}`;
-  } else {
-    title += ` from ${displaySource}`;
-  }
+  // Use a simple bullet point with the color as background
+  const title = `● ${hex.toUpperCase()}`;
+  const description = `from ${displaySource}`;
 
   // Store undo data
   const undoData: UndoData = {
@@ -291,8 +284,14 @@ export const showHistoryToast = (
   
   toast(title, {
     description: description,
-    duration: 3000,
+    duration: 2500,
     style: {
+      padding: '12px 16px',
+      fontSize: '14px',
+      minHeight: 'auto',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
       borderLeft: `4px solid ${hex}`
     },
     action: {

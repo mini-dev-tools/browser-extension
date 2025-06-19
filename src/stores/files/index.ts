@@ -17,6 +17,17 @@ export const useFileStore = defineStore('files', () => {
   const files = useLocalStorage<FileContent[]>(FILE_STORAGE_KEY, []);
   const currentFileId = useLocalStorage<string | null>(CURRENT_FILE_STORAGE_KEY, null);
   
+  // Migrate existing files to ensure content is a string
+  const migrateFiles = () => {
+    files.value = files.value.map(file => ({
+      ...file,
+      content: typeof file.content === 'string' ? file.content : String(file.content || '')
+    }));
+  };
+  
+  // Run migration on store initialization
+  migrateFiles();
+  
   // Computed values
   const getCurrentFile = computed(() => {
     if (!currentFileId.value) return null;
@@ -173,11 +184,13 @@ export const useFileStore = defineStore('files', () => {
     if (!query.trim()) return files.value;
     
     const lowercaseQuery = query.toLowerCase();
-    return files.value.filter(file =>
-      file.name.toLowerCase().includes(lowercaseQuery) ||
-      file.content.toLowerCase().includes(lowercaseQuery) ||
-      file.fileType.label.toLowerCase().includes(lowercaseQuery)
-    );
+    return files.value.filter(file => {
+      const content = file.content || '';
+      const contentStr = typeof content === 'string' ? content : String(content);
+      return file.name.toLowerCase().includes(lowercaseQuery) ||
+        contentStr.toLowerCase().includes(lowercaseQuery) ||
+        file.fileType.label.toLowerCase().includes(lowercaseQuery);
+    });
   };
 
   return {

@@ -115,6 +115,12 @@ export const navigationSections: NavigationSection[] = [
         icon: Type
       },
       {
+        label: 'Mark Down Notes',
+        path: '/markdown-notes',
+        description: 'Analyze text, generate lorem ipsum, and convert content',
+        icon: Type
+      },
+      {
         label: 'Quick Files',
         path: '/quick-files',
         description: 'Create, edit, and download text files with syntax highlighting',
