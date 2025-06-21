@@ -123,7 +123,7 @@ export default defineComponent({
       if (!currentColor.value) return [];
       
       const formats = ColorConverter.hexToAllFormats(currentColor.value);
-      return [
+      const allFormats = [
         { key: 'hex', label: 'HEX', value: formats.hexString },
         { key: 'rgb', label: 'RGB', value: formats.rgbString },
         { key: 'rgba', label: 'RGBA', value: formats.rgbaString },
@@ -135,6 +135,13 @@ export default defineComponent({
         { key: 'rgb-values', label: 'RGB Values', value: formats.rgbValues },
         { key: 'hsl-values', label: 'HSL Values', value: formats.hslValues }
       ];
+      
+      // Show fewer formats on small screens
+      if (window.innerWidth < 768) {
+        return allFormats.slice(0, 6); // Show only HEX, RGB, RGBA, HSL, HSLA, HSV
+      }
+      
+      return allFormats;
     });
     
     const handleRightClick = (event: MouseEvent) => {
@@ -273,11 +280,19 @@ export default defineComponent({
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  min-width: 280px;
-  max-width: 320px;
+  min-width: 200px;
+  max-width: 240px;
   padding: 0;
-  font-size: 14px;
+  font-size: 12px;
   z-index: 1000;
+}
+
+@media (max-width: 767px) {
+  .color-context-menu {
+    min-width: 180px;
+    max-width: 200px;
+    font-size: 11px;
+  }
 }
 
 .dark .color-context-menu {
@@ -289,10 +304,17 @@ export default defineComponent({
 .context-menu-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px;
+  gap: 8px;
+  padding: 12px;
   background: #f9fafb;
   border-radius: 8px 8px 0 0;
+}
+
+@media (max-width: 767px) {
+  .context-menu-header {
+    gap: 6px;
+    padding: 8px;
+  }
 }
 
 .dark .context-menu-header {
@@ -300,11 +322,19 @@ export default defineComponent({
 }
 
 .color-preview {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
-  border: 2px solid #e5e7eb;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid #e5e7eb;
   flex-shrink: 0;
+}
+
+@media (max-width: 767px) {
+  .color-preview {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+  }
 }
 
 .dark .color-preview {
@@ -314,7 +344,13 @@ export default defineComponent({
 .color-label {
   font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 13px;
+}
+
+@media (max-width: 767px) {
+  .color-label {
+    font-size: 11px;
+  }
 }
 
 .context-menu-divider {
@@ -328,7 +364,13 @@ export default defineComponent({
 }
 
 .context-menu-section {
-  padding: 8px 0;
+  padding: 6px 0;
+}
+
+@media (max-width: 767px) {
+  .context-menu-section {
+    padding: 4px 0;
+  }
 }
 
 .context-menu-item {
@@ -336,13 +378,20 @@ export default defineComponent({
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 10px 16px;
+  padding: 8px 12px;
   border: none;
   background: none;
   text-align: left;
   cursor: pointer;
   transition: background-color 0.15s ease;
-  gap: 12px;
+  gap: 8px;
+}
+
+@media (max-width: 767px) {
+  .context-menu-item {
+    padding: 6px 8px;
+    gap: 6px;
+  }
 }
 
 .context-menu-item:hover {
@@ -365,16 +414,33 @@ export default defineComponent({
 
 .format-label {
   font-weight: 500;
-  min-width: 80px;
+  min-width: 60px;
+}
+
+@media (max-width: 767px) {
+  .format-label {
+    min-width: 50px;
+    font-size: 10px;
+  }
 }
 
 .format-value {
   font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
-  font-size: 12px;
+  font-size: 10px;
   color: #6b7280;
   flex: 1;
   text-align: right;
-  margin-right: 8px;
+  margin-right: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .format-value {
+    font-size: 9px;
+    margin-right: 4px;
+  }
 }
 
 .dark .format-value {
@@ -382,9 +448,16 @@ export default defineComponent({
 }
 
 .copy-icon, .action-icon {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   flex-shrink: 0;
+}
+
+@media (max-width: 767px) {
+  .copy-icon, .action-icon {
+    width: 12px;
+    height: 12px;
+  }
 }
 
 .copy-icon.copied {

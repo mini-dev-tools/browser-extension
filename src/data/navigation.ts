@@ -154,6 +154,18 @@ export const navigationSections: NavigationSection[] = [
         icon: Pipette
       },
       {
+        label: 'Palettes',
+        path: '/palettes',
+        description: 'Color palette collections',
+        icon: Palette
+      },
+      {
+        label: 'Contrast Checker',
+        path: '/contrast-ratio-checker',
+        description: 'Check accessibility',
+        icon: Contrast
+      },
+      {
         label: 'Color Shades',
         path: '/color-shades',
         description: 'Generate color variations',
@@ -166,21 +178,9 @@ export const navigationSections: NavigationSection[] = [
         icon: Blend
       },
       {
-        label: 'Contrast Checker',
-        path: '/contrast-ratio-checker',
-        description: 'Check accessibility',
-        icon: Contrast
-      },
-      {
         label: 'Material Colors',
         path: '/material-colors',
         description: 'Material design colors',
-        icon: Palette
-      },
-      {
-        label: 'Palettes',
-        path: '/palettes',
-        description: 'Color palette collections',
         icon: Palette
       }
     ]

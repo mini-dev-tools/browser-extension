@@ -59,7 +59,7 @@
     </Card>
 
     <!-- Generator Section -->
-    <div class="grid gap-3 md:gap-6 md:grid-cols-2">
+    <div class="grid gap-3 md:gap-6 sm:grid-cols-2">
       <!-- UUID v4 Generator -->
       <Card>
         <CardContent class="p-3 md:p-6 space-y-4">

@@ -1,7 +1,7 @@
 <template>
   <div class="page-container space-y-4 md:space-y-6">
     <!-- Header -->
-    <div class="text-center md:text-left space-y-2">
+    <div class="hidden md:block text-center md:text-left space-y-2">
       <div class="flex items-center justify-center md:justify-start space-x-3">
         <Shield class="w-8 h-8 md:w-10 md:h-10 text-primary" />
         <h1>Password Generator</h1>
@@ -10,20 +10,20 @@
     </div>
 
     <!-- Main Content -->
-    <div class="grid gap-3 md:gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div class="grid gap-3 md:gap-4 sm:grid-cols-2">
       <!-- Configuration Panel -->
-      <div class="lg:col-span-1">
+      <div class="md:col-span-1">
         <Card>
-          <CardContent class="p-3 md:p-6 space-y-4 md:space-y-6">
+          <CardContent class="p-3 md:p-4 space-y-3 md:space-y-4">
             <div class="heading-group">
-              <h2 class="flex items-center space-x-2">
+              <h2 class="hidden md:flex items-center space-x-2 ">
                 <Settings class="w-4 h-4 md:w-5 md:h-5" />
                 <span>Configuration</span>
               </h2>
             </div>
 
             <!-- Password Length -->
-            <div class="space-y-2 md:space-y-3">
+            <div class="space-y-2">
               <div class="flex items-center justify-between">
                 <label class="text-sm font-medium">Password Length</label>
                 <span class="px-2 py-1 bg-muted rounded text-xs font-medium">
@@ -44,26 +44,26 @@
             </div>
 
             <!-- Character Types -->
-            <div class="space-y-3 md:space-y-4">
+            <div class="space-y-3">
               <h3 class="flex items-center space-x-2">
                 <Type class="w-4 h-4" />
                 <span>Character Types</span>
               </h3>
 
-              <div class="space-y-2 md:space-y-3">
+              <div class="space-y-2">
                 <div v-for="option in characterOptions" :key="option.key"
-                     class="flex items-center justify-between p-2 md:p-3 rounded-lg transition-colors"
+                     class="flex items-center justify-between p-2 rounded-lg transition-colors"
                      :class="passwordConfig.charTypes[option.key as keyof CharTypes]
                        ? 'bg-accent hover:bg-accent/80'
                        : 'bg-muted hover:bg-muted/80'">
-                  <div class="flex items-center space-x-2 md:space-x-3">
+                  <div class="flex items-center space-x-2">
                     <input
                         type="checkbox"
                         :id="option.key"
                         v-model="passwordConfig.charTypes[option.key as keyof CharTypes]"
-                        class="w-4 h-4 md:w-5 md:h-5 text-primary rounded"
+                        class="w-4 h-4 text-primary rounded"
                     />
-                    <label :for="option.key" class="text-xs md:text-sm cursor-pointer select-none">
+                    <label :for="option.key" class="text-sm cursor-pointer select-none">
                       {{ option.label }}
                     </label>
                   </div>
@@ -87,18 +87,18 @@
 
               <Transition name="slide">
                 <div v-if="showAdvanced" class="space-y-3">
-                  <div class="flex items-center justify-between p-2 md:p-3 rounded-lg"
+                  <div class="flex items-center justify-between p-2 rounded-lg"
                        :class="passwordConfig.excludeAmbiguous
                          ? 'bg-accent'
                          : 'bg-muted'">
-                    <div class="flex items-center space-x-2 md:space-x-3">
+                    <div class="flex items-center space-x-2">
                       <input
                           type="checkbox"
                           id="exclude-ambiguous"
                           v-model="passwordConfig.excludeAmbiguous"
-                          class="w-4 h-4 md:w-5 md:h-5 text-primary rounded"
+                          class="w-4 h-4 text-primary rounded"
                       />
-                      <label for="exclude-ambiguous" class="text-xs md:text-sm cursor-pointer">
+                      <label for="exclude-ambiguous" class="text-sm cursor-pointer">
                         Exclude ambiguous
                       </label>
                     </div>
@@ -132,30 +132,33 @@
               </Transition>
             </div>
 
-            <!-- Generation Mode -->
+            <!-- Generation Mode Tabs -->
             <div class="space-y-3">
-              <h3>Generation Mode</h3>
-              <div class="flex items-center space-x-3 p-2 md:p-3 rounded-lg bg-accent">
+              <div class="flex bg-muted rounded-lg p-1">
                 <button
-                    @click="passwordConfig.mode = passwordConfig.mode === 'batch' ? 'single' : 'batch'"
-                    class="relative inline-flex items-center cursor-pointer"
+                    @click="passwordConfig.mode = 'single'"
+                    class="flex-1 py-2 px-3 text-sm font-medium rounded-md transition-colors"
+                    :class="passwordConfig.mode === 'single' 
+                      ? 'bg-background text-foreground shadow-sm' 
+                      : 'text-muted-foreground hover:text-foreground'"
                 >
-                  <div class="w-11 h-6 bg-muted rounded-full transition-colors"
-                       :class="{ 'bg-primary': passwordConfig.mode === 'batch' }">
-                    <div class="w-5 h-5 bg-white rounded-full shadow transform transition-transform"
-                         :class="{ 'translate-x-5': passwordConfig.mode === 'batch', 'translate-x-0.5': passwordConfig.mode === 'single' }">
-                    </div>
-                  </div>
-                  <span class="ml-3 text-sm">
-                    {{ passwordConfig.mode === 'batch' ? 'Batch Generation' : 'Single Password' }}
-                  </span>
+                  Single
+                </button>
+                <button
+                    @click="passwordConfig.mode = 'batch'"
+                    class="flex-1 py-2 px-3 text-sm font-medium rounded-md transition-colors"
+                    :class="passwordConfig.mode === 'batch' 
+                      ? 'bg-background text-foreground shadow-sm' 
+                      : 'text-muted-foreground hover:text-foreground'"
+                >
+                  Batch
                 </button>
               </div>
             </div>
 
             <!-- Batch Count -->
             <Transition name="slide">
-              <div v-if="passwordConfig.mode === 'batch'" class="space-y-2 p-2 md:p-3 rounded-lg bg-accent border">
+              <div v-if="passwordConfig.mode === 'batch'" class="space-y-2 p-2 rounded-lg bg-accent border">
                 <label class="font-medium text-sm">Number of Passwords</label>
                 <div class="flex items-center space-x-2">
                   <input
@@ -172,13 +175,13 @@
             </Transition>
 
             <!-- Generate Button -->
-            <div class="pt-4">
+            <div class="pt-3">
               <button
                   @click="generatePasswords"
                   :disabled="!hasValidConfig"
-                  class="w-full py-2 md:py-3 px-4 bg-primary text-primary-foreground font-medium rounded-lg shadow hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+                  class="w-full py-2 px-4 bg-primary text-primary-foreground font-medium rounded-lg shadow hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
               >
-                <Zap class="w-4 h-4 md:w-5 md:h-5" />
+                <Zap class="w-4 h-4" />
                 <span>Generate {{ passwordConfig.mode === 'batch' ? passwordConfig.batchCount + ' Passwords' : 'Password' }}</span>
               </button>
 
@@ -192,9 +195,9 @@
       </div>
 
       <!-- Results Panel -->
-      <div class="lg:col-span-2">
+      <div class="md:col-span-1">
         <Card>
-          <CardContent class="p-3 md:p-6 space-y-4 md:space-y-6">
+          <CardContent class="p-3 md:p-4 space-y-3 md:space-y-4">
             <div class="flex items-center justify-between">
               <h2 class="flex items-center space-x-2">
                 <Key class="w-4 h-4 md:w-5 md:h-5" />
@@ -209,27 +212,27 @@
             </div>
 
             <!-- Single Password Result -->
-            <div v-if="passwordConfig.mode === 'single' && state.currentPassword" class="space-y-4 md:space-y-6 animate-slide-in">
-              <div class="p-3 md:p-6 rounded-xl bg-accent">
-                <div class="flex items-center space-x-2 md:space-x-3">
+            <div v-if="passwordConfig.mode === 'single' && state.currentPassword" class="space-y-3 animate-slide-in">
+              <div class="p-3 rounded-xl bg-accent">
+                <div class="flex items-center space-x-2">
                   <input
                       :value="state.currentPassword"
                       readonly
-                      class="flex-1 px-3 md:px-4 py-2 md:py-3 bg-background/70 rounded-lg font-mono text-sm md:text-lg focus:outline-none"
+                      class="flex-1 px-3 py-2 bg-background/70 rounded-lg font-mono text-sm focus:outline-none"
                   />
                   <button
                       @click="copyToClipboard(state.currentPassword)"
-                      class="p-2 md:p-3 hover:bg-background/50 rounded-lg transition-colors"
+                      class="p-2 hover:bg-background/50 rounded-lg transition-colors"
                       title="Copy password"
                   >
-                    <Copy class="w-4 h-4 md:w-5 md:h-5" />
+                    <Copy class="w-4 h-4" />
                   </button>
                   <button
                       @click="generatePasswords"
-                      class="p-2 md:p-3 hover:bg-background/50 rounded-lg transition-colors"
+                      class="p-2 hover:bg-background/50 rounded-lg transition-colors"
                       title="Regenerate password"
                   >
-                    <RefreshCw class="w-4 h-4 md:w-5 md:h-5" />
+                    <RefreshCw class="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -275,25 +278,25 @@
               </div>
 
               <!-- Password List -->
-              <div class="rounded-lg border bg-muted/50 p-3 md:p-4"
+              <div class="rounded-lg border bg-muted/50 p-3"
                    :class="state.passwords.length === 0 ? 'border-dashed' : ''">
-                <div v-if="state.passwords.length > 0" class="max-h-96 overflow-y-auto space-y-2">
+                <div v-if="state.passwords.length > 0" class="max-h-80 overflow-y-auto space-y-1">
                   <div v-for="(pwd, index) in state.passwords"
                        :key="index"
-                       class="group flex items-center space-x-2 md:space-x-3 p-2 md:p-3 rounded-lg bg-background hover:bg-muted transition-all">
-                    <span class="text-xs text-muted-foreground w-8 md:w-12 text-right font-mono">{{ index + 1 }}</span>
-                    <code class="flex-1 text-xs md:text-sm font-mono break-all select-all">{{ pwd }}</code>
+                       class="group flex items-center space-x-2 p-2 rounded-lg bg-background hover:bg-muted transition-all">
+                    <span class="text-xs text-muted-foreground w-8 text-right font-mono">{{ index + 1 }}</span>
+                    <code class="flex-1 text-xs font-mono break-all select-all">{{ pwd }}</code>
                     <button
                         @click="copyToClipboard(pwd, index)"
-                        class="opacity-0 group-hover:opacity-100 transition-opacity p-1 md:p-2 hover:bg-accent rounded"
+                        class="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-accent rounded"
                     >
-                      <Copy class="w-3 h-3 md:w-4 md:h-4" />
+                      <Copy class="w-3 h-3" />
                     </button>
                   </div>
                 </div>
 
-                <div v-else class="flex flex-col items-center justify-center py-8 md:py-12 text-center">
-                  <ListChecks class="w-8 h-8 md:w-12 md:h-12 text-muted-foreground mb-3" />
+                <div v-else class="flex flex-col items-center justify-center py-6 text-center">
+                  <ListChecks class="w-8 h-8 text-muted-foreground mb-3" />
                   <p class="text-muted-foreground text-sm">
                     Click "Generate {{ passwordConfig.batchCount }} Passwords" to create your password list
                   </p>
@@ -332,9 +335,9 @@
 
             <!-- Empty State -->
             <div v-if="passwordConfig.mode === 'single' && !state.currentPassword"
-                 class="flex flex-col items-center justify-center py-12 md:py-16 text-center">
-              <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-muted flex items-center justify-center mb-4">
-                <Key class="w-8 h-8 md:w-10 md:h-10 text-muted-foreground" />
+                 class="flex flex-col items-center justify-center py-8 text-center">
+              <div class="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <Key class="w-8 h-8 text-muted-foreground" />
               </div>
               <p class="text-foreground text-lg mb-2">No password generated yet</p>
               <p class="text-sm text-muted-foreground">
